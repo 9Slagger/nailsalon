@@ -23,10 +23,14 @@ app.get('*', function(req, res){
     res.status(404).json("Not Found 404")
 });
 
-const server = app.listen(8082, function(){
-    var host = server.address().address;
-    var port = server.address().port;
+// const server = app.listen(8082, function(){
+//     var host = server.address().address;
+//     var port = server.address().port;
 
-    console.log('Running ... http://localhost%s', host, port);
+//     console.log('Running ... http://localhost%s', host, port);
+// })
+
+const PORT = process.env.PORT || 8082
+app.listen(PORT, () => {
+    console.log(`Server is lisrening on ${PORT}`)
 })
-
