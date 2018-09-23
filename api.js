@@ -574,6 +574,15 @@ app.put('/room_usage', verifyToken, (req, res) => {
   });
 });
 
+app.put('/test', verifyToken, (req, res) => {
+makedata = {
+  a: "aaaa",
+  b: "bbbb"
+}
+      res.set({ 'status': '200' });
+      res.status(200).json(makedata)
+});
+
 // Queue.remove({}, (err) => {
 //   if(err) {
 //       console.log(err);
