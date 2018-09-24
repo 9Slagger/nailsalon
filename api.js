@@ -265,7 +265,7 @@ app.post('/queue', verifyToken, (req, res) => {
 });
 
 // ----------รับ Queue ขั้นตอนการรับคิว
-app.put('/booking_queue', verifyToken, (req, res) => {
+app.put('/queue/booking', verifyToken, (req, res) => {
   async function findQueue(Queue_id) {
     return await Queue.findById(Queue_id).exec();
   }
@@ -305,6 +305,8 @@ app.put('/booking_queue', verifyToken, (req, res) => {
   async function main() {
     try {
       var dateNow = new Date();
+      dateNow.setHours( dateNow.getHours() + 7 );
+      console.log(dateNow)
       midnight_date = await dateNow
       await midnight_date.setHours(0)
       await midnight_date.setMinutes(0)
@@ -353,16 +355,17 @@ app.put('/booking_queue', verifyToken, (req, res) => {
 });
 
 // ---------- ค้าหา queue "ที่นัดหมายไว้" จากวันเดือนปีที่กำหนด
-app.get('/queue_appointment', (req, res) => {
+app.get('/queue/appointment', (req, res) => {
   var year = req.query.year
   var month = parseInt(req.query.month)
   month = month - 1
   var day = req.query.day
   var nextday = parseInt(day) + 1
-  let timezone = new Date().getTimezoneOffset();
-  timezone = timezone / 60 * (-1)
-  midnight_date = new Date(year, month, day, 0 + timezone, 0, 0);
-  nextdate = new Date(year, month, nextday, 0 + timezone, 0, 0);
+  // let timezone = new Date().getTimezoneOffset();
+  // timezone = timezone / 60 * (-1)
+  let timezone = 7
+  midnight_date = new Date(year, month, day, 0 , 0, 0);
+  nextdate = new Date(year, month, nextday, 0 , 0, 0);
   Queue.find({ appointment_date: { $gte: midnight_date, $lt: nextdate } }).exec(function (err, data) {
     if (err) {
       res.set({ 'status': '404' });
@@ -376,17 +379,18 @@ app.get('/queue_appointment', (req, res) => {
 })
 
 // ---------- ค้าหา queue "ที่อยู่ในห้องทำฟัน" จากวันเดือนปีที่กำหนด
-app.get('/queue_active', (req, res) => {
+app.get('/queue/active', (req, res) => {
   var year = req.query.year
   var month = parseInt(req.query.month)
   month = month - 1
   var day = req.query.day
   var nextday = parseInt(day) + 1
-  let timezone = new Date().getTimezoneOffset();
-  timezone = timezone / 60 * (-1)
-  midnight_date = new Date(year, month, day, 0 + timezone, 0, 0);
-  nextdate = new Date(year, month, nextday, 0 + timezone, 0, 0);
-  Queue.find({status: "active", queue_date: { $gte: midnight_date, $lt: nextdate } }).exec(function (err, data) {
+  // let timezone = new Date().getTimezoneOffset();
+  // timezone = timezone / 60 * (-1)
+  let timezone = 7
+  midnight_date = new Date(year, month, day, 0 , 0, 0);
+  nextdate = new Date(year, month, nextday, 0 , 0, 0);
+  Queue.find({ status: "active", queue_date: { $gte: midnight_date, $lt: nextdate } }).exec(function (err, data) {
     if (err) {
       res.set({ 'status': '404' });
       res.status(404).json("Not Found Queue")
@@ -399,17 +403,18 @@ app.get('/queue_active', (req, res) => {
 })
 
 // ---------- ค้าหา queue "ที่รับคิวไปแล้ว" จากวันเดือนปีที่กำหนด
-app.get('/queue_booking', (req, res) => {
+app.get('/queue/booking', (req, res) => {
   var year = req.query.year
   var month = parseInt(req.query.month)
   month = month - 1
   var day = req.query.day
   var nextday = parseInt(day) + 1
-  let timezone = new Date().getTimezoneOffset();
-  timezone = timezone / 60 * (-1)
-  midnight_date = new Date(year, month, day, 0 + timezone, 0, 0);
-  nextdate = new Date(year, month, nextday, 0 + timezone, 0, 0);
-  Queue.find({status: "wait_in_queue", queue_date: { $gte: midnight_date, $lt: nextdate } }).exec(function (err, data) {
+  // let timezone = new Date().getTimezoneOffset();
+  // timezone = timezone / 60 * (-1)
+  let timezone = 7
+  midnight_date = new Date(year, month, day, 0, 0, 0);
+  nextdate = new Date(year, month, nextday, 0 , 0, 0);
+  Queue.find({ status: "booking_queue", queue_date: { $gte: midnight_date, $lt: nextdate } }).exec(function (err, data) {
     if (err) {
       res.set({ 'status': '404' });
       res.status(404).json("Not Found Queue")
@@ -447,8 +452,8 @@ app.get('/queue', (req, res) => {
       }
     });
   }
-  else if (req.query.employee) {
-    Queue.find({ employee: req.query.employee }).exec(function (err, data) {
+  else if (req.query.employee_id) {
+    Queue.find({ employee: req.query.employee_id }).exec(function (err, data) {
       if (err) {
         res.set({ 'status': '404' });
         res.status(404).json("Not Found Queue")
@@ -459,8 +464,8 @@ app.get('/queue', (req, res) => {
       }
     });
   }
-  else if (req.query.doctor) {
-    Queue.find({ doctor: req.query.doctor }).exec(function (err, data) {
+  else if (req.query.doctor_id) {
+    Queue.find({ doctor: req.query.doctor_id }).exec(function (err, data) {
       if (err) {
         res.set({ 'status': '404' });
         res.status(404).json("Not Found Queue")
@@ -659,8 +664,7 @@ app.post('/room_usage', verifyToken, (req, res) => {
 });
 
 app.put('/room_usage', verifyToken, (req, res) => {
-  console.log(req.query.id)
-  Room_usage.findOneAndUpdate({ _id: req.query.id }, { status: "active" }, { new: true }, (err, data) => {
+  Room_usage.findOneAndUpdate({ _id: req.body.id }, { status: req.body.status }, { new: true }, (err, data) => {
     if (data) {
       res.set({ 'status': '200' });
       res.status(200).json(data)
@@ -708,5 +712,6 @@ app.put('/test', verifyToken, (req, res) => {
 //     return this.name;
 //   },
 // }
+console.log(new Date())
 
 module.exports = app;
