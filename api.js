@@ -210,29 +210,59 @@ app.post('/doctor/login', (req, res) => {
 
 // ----------สร้าง Queue ขั้นตอนการจอง
 app.post('/queue', verifyToken, (req, res) => {
-  let queue = new Queue({
-    customer: req.body.customer,
-    employee: req.id,
-    doctor: req.body.doctor,
+  async function Customer(id) {
+    return await Customer.findById(id).exec();
+  }
+  async function Doctor(id) {
+    return await Doctor.findById(id).exec();
+  }
 
-    title: req.body.title || "เปลี่ยนยางจัดฟัน",
-    description: req.body.description || "รายละเอียดบลาๆ",
+  main();
+  async function main() {
+    try {
+      Customer = Customer(req.body.customer);
+      Doctor = Doctor(req.body.doctor);
 
-    appointment_date: req.body.appointment_date,
-    record_date: new Date(),
+      if (Customer != null) {
+        if (Doctor != null) {
+          let queue = new Queue({
+            customer: req.body.customer,
+            employee: req.id,
+            doctor: req.body.doctor,
 
-    status: "appointment"
-  })
-  queue.save({ new: true }, function (err, data) {
-    if (err) {
-      res.set({ 'status': '404' });
-      res.status(404).json(err)
+            title: req.body.title || "เปลี่ยนยางจัดฟัน",
+            description: req.body.description || "รายละเอียดบลาๆ",
+
+            appointment_date: req.body.appointment_date,
+            record_date: new Date(),
+
+            status: "appointment"
+          })
+          queue.save({ new: true }, function (err, data) {
+            if (err) {
+              res.set({ 'status': '404' });
+              res.status(404).json(err)
+            }
+            else {
+              res.set({ 'status': '201' });
+              res.status(201).json(data)
+            }
+          });
+        }
+        else {
+          res.set({ 'status': '404' });
+          res.status(404).json("Not Found Doctor")
+        }
+      }
+      else {
+        res.set({ 'status': '404' });
+        res.status(404).json("Not Found Customer")
+      }
     }
-    else {
-      res.set({ 'status': '201' });
-      res.status(201).json(data)
+    catch (error) {
+      console.log(error)
     }
-  });
+  }
 });
 
 // ----------รับ Queue ขั้นตอนการรับคิว
@@ -575,12 +605,12 @@ app.put('/room_usage', verifyToken, (req, res) => {
 });
 
 app.put('/test', verifyToken, (req, res) => {
-makedata = {
-  a: "aaaa",
-  b: "bbbb"
-}
-      res.set({ 'status': '200' });
-      res.status(200).json(makedata)
+  makedata = {
+    a: "aaaa",
+    b: "bbbb"
+  }
+  res.set({ 'status': '200' });
+  res.status(200).json(makedata)
 });
 
 // Queue.remove({}, (err) => {
@@ -590,25 +620,25 @@ makedata = {
 //   console.log('remove successfully.');
 // })
 
-var data_temp = {
-  set doctor_id(id) {
-    this.id = id
-  },
-  get doctor_id() {
-    if (this.id == 0) {
-      return undefined;
-    }
-    return this.id;
-  },
-  set current(name) {
-    this.name = name
-  },
-  get current() {
-    if (this.name == 0) {
-      return undefined;
-    }
-    return this.name;
-  },
-}
+// var data_temp = {
+//   set doctor_id(id) {
+//     this.id = id
+//   },
+//   get doctor_id() {
+//     if (this.id == 0) {
+//       return undefined;
+//     }
+//     return this.id;
+//   },
+//   set current(name) {
+//     this.name = name
+//   },
+//   get current() {
+//     if (this.name == 0) {
+//       return undefined;
+//     }
+//     return this.name;
+//   },
+// }
 
 module.exports = app;
