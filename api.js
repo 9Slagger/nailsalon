@@ -210,21 +210,22 @@ app.post('/doctor/login', (req, res) => {
 
 // ----------สร้าง Queue ขั้นตอนการจอง
 app.post('/queue', verifyToken, (req, res) => {
-  async function Customer(id) {
+  async function findCustomer(id) {
     return await Customer.findById(id).exec();
   }
-  async function Doctor(id) {
+  async function findDoctor(id) {
     return await Doctor.findById(id).exec();
   }
 
   main();
   async function main() {
     try {
-      Customer = await Customer(req.body.customer);
-      Doctor = await Doctor(req.body.doctor);
-      console.log(Customer,Doctor)
-      if (Customer != null) {
-        if (Doctor != null) {
+      console.log(req.body.customer)
+      console.log(req.body.doctor)
+      data_customer = await findCustomer(req.body.customer);
+      data_doctor = await findDoctor(req.body.doctor);
+      if (data_customer != null) {
+        if (data_doctor != null) {
           let queue = new Queue({
             customer: req.body.customer,
             employee: req.id,
