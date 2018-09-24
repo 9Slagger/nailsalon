@@ -220,8 +220,8 @@ app.post('/queue', verifyToken, (req, res) => {
   main();
   async function main() {
     try {
-      Customer = Customer(req.body.customer);
-      Doctor = Doctor(req.body.doctor);
+      Customer = await Customer(req.body.customer);
+      Doctor = await Doctor(req.body.doctor);
       console.log(Customer,Doctor)
       if (Customer != null) {
         if (Doctor != null) {
