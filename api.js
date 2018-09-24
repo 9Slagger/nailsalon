@@ -220,8 +220,6 @@ app.post('/queue', verifyToken, (req, res) => {
   main();
   async function main() {
     try {
-      console.log(req.body.customer)
-      console.log(req.body.doctor)
       data_customer = await findCustomer(req.body.customer);
       data_doctor = await findDoctor(req.body.doctor);
       if (data_customer != null) {
@@ -267,7 +265,7 @@ app.post('/queue', verifyToken, (req, res) => {
 });
 
 // ----------รับ Queue ขั้นตอนการรับคิว
-app.put('/queue', verifyToken, (req, res) => {
+app.put('/booking_queue', verifyToken, (req, res) => {
   async function findQueue(Queue_id) {
     return await Queue.findById(Queue_id).exec();
   }
@@ -320,7 +318,7 @@ app.put('/queue', verifyToken, (req, res) => {
       if (checkAppointment_Date) {  // หากวันที่นัดตรงกับวันที่ปัจจุบันให้ทำ ...
         if (findQueue != null && findQueue.status == "appointment") {
           if (findRoom_usage != null && findRoom_usage.status == 'active') {
-            Queue.findByIdAndUpdate(req.body.id, { status: "wait_in_queue", queue_order: QueueBefore + 1, priority: priority, queue_date: dateNow }, { new: true }, (err, data) => {
+            Queue.findByIdAndUpdate(req.body.id, { status: "booking_queue", queue_order: QueueBefore + 1, priority: priority, queue_date: dateNow }, { new: true }, (err, data) => {
               if (err) {
                 res.set({ 'status': '400' });
                 res.status(400).json(err)
@@ -353,6 +351,52 @@ app.put('/queue', verifyToken, (req, res) => {
     }
   }
 });
+
+// ---------- ค้าหา queue "ที่นัดหมายไว้" จากวันเดือนปีที่กำหนด
+app.get('/queue_appointment', (req, res) => {
+  var year = req.query.year
+  var month = parseInt(req.query.month)
+  month = month - 1
+  var day = req.query.day
+  var nextday = parseInt(day) + 1
+  let timezone = new Date().getTimezoneOffset();
+  timezone = timezone / 60 * (-1)
+  midnight_date = new Date(year, month, day, 0 + timezone, 0, 0);
+  nextdate = new Date(year, month, nextday, 0 + timezone, 0, 0);
+  Queue.find({ appointment_date: { $gte: midnight_date, $lt: nextdate } }).exec(function (err, data) {
+    if (err) {
+      res.set({ 'status': '404' });
+      res.status(404).json("Not Found Queue")
+    }
+    else {
+      res.set({ 'status': '200' });
+      res.status(200).json(data)
+    }
+  });
+})
+
+// ---------- ค้าหา queue "ที่รับคิวไปแล้ว" จากวันเดือนปีที่กำหนด
+app.get('/queue_booking', (req, res) => {
+  var year = req.query.year
+  var month = parseInt(req.query.month)
+  month = month - 1
+  var day = req.query.day
+  var nextday = parseInt(day) + 1
+  let timezone = new Date().getTimezoneOffset();
+  timezone = timezone / 60 * (-1)
+  midnight_date = new Date(year, month, day, 0 + timezone, 0, 0);
+  nextdate = new Date(year, month, nextday, 0 + timezone, 0, 0);
+  Queue.find({ queue_date: { $gte: midnight_date, $lt: nextdate } }).exec(function (err, data) {
+    if (err) {
+      res.set({ 'status': '404' });
+      res.status(404).json("Not Found Queue")
+    }
+    else {
+      res.set({ 'status': '200' });
+      res.status(200).json(data)
+    }
+  });
+})
 
 // ---------- ค้าหา queue ทั้งหมด
 app.get('/queue', (req, res) => {
