@@ -375,6 +375,29 @@ app.get('/queue_appointment', (req, res) => {
   });
 })
 
+// ---------- ค้าหา queue "ที่อยู่ในห้องทำฟัน" จากวันเดือนปีที่กำหนด
+app.get('/queue_active', (req, res) => {
+  var year = req.query.year
+  var month = parseInt(req.query.month)
+  month = month - 1
+  var day = req.query.day
+  var nextday = parseInt(day) + 1
+  let timezone = new Date().getTimezoneOffset();
+  timezone = timezone / 60 * (-1)
+  midnight_date = new Date(year, month, day, 0 + timezone, 0, 0);
+  nextdate = new Date(year, month, nextday, 0 + timezone, 0, 0);
+  Queue.find({status: "active", queue_date: { $gte: midnight_date, $lt: nextdate } }).exec(function (err, data) {
+    if (err) {
+      res.set({ 'status': '404' });
+      res.status(404).json("Not Found Queue")
+    }
+    else {
+      res.set({ 'status': '200' });
+      res.status(200).json(data)
+    }
+  });
+})
+
 // ---------- ค้าหา queue "ที่รับคิวไปแล้ว" จากวันเดือนปีที่กำหนด
 app.get('/queue_booking', (req, res) => {
   var year = req.query.year
@@ -386,7 +409,7 @@ app.get('/queue_booking', (req, res) => {
   timezone = timezone / 60 * (-1)
   midnight_date = new Date(year, month, day, 0 + timezone, 0, 0);
   nextdate = new Date(year, month, nextday, 0 + timezone, 0, 0);
-  Queue.find({ queue_date: { $gte: midnight_date, $lt: nextdate } }).exec(function (err, data) {
+  Queue.find({status: "wait_in_queue", queue_date: { $gte: midnight_date, $lt: nextdate } }).exec(function (err, data) {
     if (err) {
       res.set({ 'status': '404' });
       res.status(404).json("Not Found Queue")
