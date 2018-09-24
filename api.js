@@ -222,7 +222,7 @@ app.post('/queue', verifyToken, (req, res) => {
     try {
       Customer = Customer(req.body.customer);
       Doctor = Doctor(req.body.doctor);
-
+      console.log(Customer,Doctor)
       if (Customer != null) {
         if (Doctor != null) {
           let queue = new Queue({
