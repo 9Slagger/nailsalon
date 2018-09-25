@@ -115,7 +115,7 @@ app.post('/customer/register', verifyToken, (req, res) => {
 
 // ---------- customer login
 app.post('/customer/login', (req, res) => {
-  Employee.find({ 'username': req.body.username }, (err, result) => {
+  Customer.find({ 'username': req.body.username }, (err, result) => {
     if (err) {
       res.json(result_failed);
     } else {
