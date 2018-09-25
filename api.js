@@ -266,6 +266,7 @@ app.post('/queue', verifyToken, (req, res) => {
 
 // ----------รับ Queue ขั้นตอนการรับคิว
 app.put('/queue/booking', verifyToken, (req, res) => {
+  console.log(res.body)
   async function findQueue(Queue_id) {
     return await Queue.findById(Queue_id).exec();
   }
