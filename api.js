@@ -327,8 +327,8 @@ app.put('/queue/booking', verifyToken, (req, res) => {
                 res.status(400).json(err)
               }
               else {
-                res.set({ 'status': '200' });
-                res.status(200).json(data)
+                res.set({ 'status': '201' });
+                res.status(201).json(data)
               }
             });
           }
