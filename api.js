@@ -612,7 +612,7 @@ app.post('/room', verifyToken, (req, res) => {
 
 // ---------- get doctor
 app.get('/doctor', verifyToken, (req, res) => {
-  Doctor.findOne().exec(function (err, data) {
+  Doctor.find().exec(function (err, data) {
     if (err) {
       res.set({ 'status': '404' });
       res.status(404).json(err)
