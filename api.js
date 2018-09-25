@@ -610,6 +610,20 @@ app.post('/room', verifyToken, (req, res) => {
   });
 });
 
+// ---------- get doctor
+app.get('/doctor', verifyToken, (req, res) => {
+  Doctor.findOne().exec(function (err, data) {
+    if (err) {
+      res.set({ 'status': '404' });
+      res.status(404).json(err)
+    }
+    else {
+      res.set({ 'status': '200' });
+      res.status(200).json(data)
+    }
+  });
+});
+
 // ---------- put room   .../room?room_name=2
 app.put('/room', verifyToken, (req, res) => {
   Room.findOneAndUpdate({ room_name: req.query.room_name }, { room_name: req.body.room_name }, { new: true }, (err, data) => {
