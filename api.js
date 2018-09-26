@@ -314,6 +314,7 @@ app.put('/queue/booking', verifyToken, (req, res) => {
       await midnight_date.setSeconds(0)
       await midnight_date.setMilliseconds(0)
       findQueue = await findQueue(req.body.id);  //เก็บข้อมูลคิวที่กำลังรับหมายเลขคิว
+      console.log(findQueue)
       findRoom_usage = await findRoom_usage(findQueue.doctor, midnight_date); // เก็บข้อมูลของห้องของหมอที่คนไข้ปัจจุบันนัดไว้
       var priority = await checkPriority(dateNow, findQueue.record_date);  // เก็บ priority Queue ปัจจุบัน
       checkAppointment_Date = await checkAppointment_Date(dateNow, findQueue.appointment_date);  // เช็คว่า Queue ที่นัดไว้ตรงกับวันที่ปัจจุบันไหม
