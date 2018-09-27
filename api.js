@@ -326,7 +326,7 @@ app.put('/queue/booking', verifyToken, (req, res) => {
       if (checkAppointment_Date) {  // หากวันที่นัดตรงกับวันที่ปัจจุบันให้ทำ ...
         if (findQueue != null && findQueue.status == "appointment") {
           if (findRoom_usage != null && findRoom_usage.status == 'active') {
-            Queue.findByIdAndUpdate(req.body.id, { status: "booking_queue", queue_order: QueueBefore + 1, priority: priority, queue_date: dateNow }, { new: true }, (err, data) => {
+            Queue.findByIdAndUpdate(req.body.id, {room_usage: findRoom_usage._id, status: "booking_queue", queue_order: QueueBefore + 1, priority: priority, queue_date: dateNow }, { new: true }, (err, data) => {
               if (err) {
                 res.set({ 'status': '400' });
                 res.status(400).json(err)
@@ -705,11 +705,6 @@ app.put('/room_usage', verifyToken, (req, res) => {
   });
 });
 
-Queue.find({ '_id': '5ba91f3e5dcc1c001524c151' }).populate('room_usage').exec(function (err, data) {
-  if (err) return handleError(err);
-  console.log(data);
-});
-
 app.put('/test', verifyToken, (req, res) => {
   makedata = {
     a: "aaaa",
@@ -717,6 +712,11 @@ app.put('/test', verifyToken, (req, res) => {
   }
   res.set({ 'status': '200' });
   res.status(200).json(makedata)
+});
+
+Queue.find({ '_id': '5ba91f3e5dcc1c001524c151' }).populate('room_usage').exec(function (err, data) {
+  if (err) return handleError(err);
+  console.log(data);
 });
 
 // Queue.remove({}, (err) => {
