@@ -6,6 +6,7 @@ var room_usageSchema = Schema({
     employee: { type: Schema.Types.ObjectId, ref: 'Employee' },
     doctor: { type: Schema.Types.ObjectId, ref: 'Doctor' },
 
+    room_name: String,
     status: String,
     usage_date: Date,
     record_date: Date

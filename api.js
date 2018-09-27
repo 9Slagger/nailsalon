@@ -306,7 +306,7 @@ app.put('/queue/booking', verifyToken, (req, res) => {
   async function main() {
     try {
       var dateNow = new Date();
-      dateNow.setHours( dateNow.getHours() + 7 );
+      dateNow.setHours(dateNow.getHours() + 7);
       console.log(dateNow)
       midnight_date = await dateNow
       await midnight_date.setHours(0)
@@ -315,7 +315,7 @@ app.put('/queue/booking', verifyToken, (req, res) => {
       await midnight_date.setMilliseconds(0)
       findQueue = await findQueue(req.body.id);  //เก็บข้อมูลคิวที่กำลังรับหมายเลขคิว
       console.log(findQueue)
-      if (findQueue == null){
+      if (findQueue == null) {
         res.set({ 'status': '404' });
         res.status(404).json("Not Found Queue")
       }
@@ -370,8 +370,8 @@ app.get('/queue/appointment', (req, res) => {
   // let timezone = new Date().getTimezoneOffset();
   // timezone = timezone / 60 * (-1)
   let timezone = 7
-  midnight_date = new Date(year, month, day, 0 , 0, 0);
-  nextdate = new Date(year, month, nextday, 0 , 0, 0);
+  midnight_date = new Date(year, month, day, 0, 0, 0);
+  nextdate = new Date(year, month, nextday, 0, 0, 0);
   Queue.find({ appointment_date: { $gte: midnight_date, $lt: nextdate } }).exec(function (err, data) {
     if (err) {
       res.set({ 'status': '404' });
@@ -394,8 +394,8 @@ app.get('/queue/active', (req, res) => {
   // let timezone = new Date().getTimezoneOffset();
   // timezone = timezone / 60 * (-1)
   let timezone = 7
-  midnight_date = new Date(year, month, day, 0 , 0, 0);
-  nextdate = new Date(year, month, nextday, 0 , 0, 0);
+  midnight_date = new Date(year, month, day, 0, 0, 0);
+  nextdate = new Date(year, month, nextday, 0, 0, 0);
   Queue.find({ status: "active", queue_date: { $gte: midnight_date, $lt: nextdate } }).exec(function (err, data) {
     if (err) {
       res.set({ 'status': '404' });
@@ -419,7 +419,7 @@ app.get('/queue/booking', (req, res) => {
   // timezone = timezone / 60 * (-1)
   let timezone = 7
   midnight_date = new Date(year, month, day, 0, 0, 0);
-  nextdate = new Date(year, month, nextday, 0 , 0, 0);
+  nextdate = new Date(year, month, nextday, 0, 0, 0);
   Queue.find({ status: "booking_queue", queue_date: { $gte: midnight_date, $lt: nextdate } }).exec(function (err, data) {
     if (err) {
       res.set({ 'status': '404' });
@@ -660,25 +660,34 @@ app.delete('/room', verifyToken, (req, res) => {
 
 // ---------- post room_usage
 app.post('/room_usage', verifyToken, (req, res) => {
-  let room_usage = new Room_usage({
-    _id: new mongoose.Types.ObjectId(),
-
-    room: req.body.room,
-    employee: req.id,
-    doctor: req.body.doctor,
-
-    status: "pending",
-    usage_date: req.body.usage_date,
-    record_date: new Date()
-  })
-  room_usage.save({ new: true }, function (err, data) {
+  Room.findById(req.body.room, (err, data) => {
     if (err) {
-      res.set({ 'status': '400' });
-      res.status(400).json(err)
+      res.set({ 'status': '404' });
+      res.status(404).json("Not Found Room")
     }
     else {
-      res.set({ 'status': '201' });
-      res.status(201).json(data)
+      let room_usage = new Room_usage({
+        _id: new mongoose.Types.ObjectId(),
+
+        room: req.body.room,
+        room_name: data.room_name,
+        employee: req.id,
+        doctor: req.body.doctor,
+
+        status: "pending",
+        usage_date: req.body.usage_date,
+        record_date: new Date()
+      });
+      room_usage.save({ new: true }, function (err, data) {
+        if (err) {
+          res.set({ 'status': '404' });
+          res.status(400).json(err)
+        }
+        else {
+          res.set({ 'status': '201' });
+          res.status(201).json(data)
+        }
+      });
     }
   });
 });
@@ -694,6 +703,11 @@ app.put('/room_usage', verifyToken, (req, res) => {
       res.status(400).json(err)
     }
   });
+});
+
+Queue.find({ '_id': '5ba91f3e5dcc1c001524c151' }).populate('room_usage').exec(function (err, data) {
+  if (err) return handleError(err);
+  console.log(data);
 });
 
 app.put('/test', verifyToken, (req, res) => {
