@@ -94,6 +94,7 @@ app.post('/customer/register', verifyToken, (req, res) => {
     address: req.body.address,
     allergy_history: req.body.allergy_history,
     birthday: req.body.birthday,
+    personalid: req.body.personalid,
     record_date: new Date(),
     employee: res.is
   });
