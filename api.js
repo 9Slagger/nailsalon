@@ -707,16 +707,30 @@ app.put('/room_usage', verifyToken, (req, res) => {
 });
 
 app.get('/customer', (req, res) => {
-  Customer.findOne({ personalid: req.query.personalid }).exec(function (err, data) {
-    if (err) {
-      res.set({ 'status': '404' });
-      res.status(404).json("Not Found Customer")
-    }
-    else {
-      res.set({ 'status': '200' });
-      res.status(200).json(data)
-    }
-  });
+  if (req.query.personalid != null) {
+    Customer.findOne({ personalid: req.query.personalid }).exec(function (err, data) {
+      if (err) {
+        res.set({ 'status': '404' });
+        res.status(404).json("Not Found Customer")
+      }
+      else {
+        res.set({ 'status': '200' });
+        res.status(200).json(data)
+      }
+    });
+  }
+  else if (req.query.phone != null) {
+    Customer.findOne({ phone: req.query.phone }).exec(function (err, data) {
+      if (err) {
+        res.set({ 'status': '404' });
+        res.status(404).json("Not Found Customer")
+      }
+      else {
+        res.set({ 'status': '200' });
+        res.status(200).json(data)
+      }
+    });
+  }
 });
 
 
