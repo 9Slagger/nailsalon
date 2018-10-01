@@ -705,6 +705,22 @@ app.put('/room_usage', verifyToken, (req, res) => {
   });
 });
 
+app.get('/customer', (req, res) => {
+  if (req.query.id) {
+    Queue.findOne({personalid:req.query.personalid}).exec(function (err, data) {
+      if (err) {
+        res.set({ 'status': '404' });
+        res.status(404).json("Not Found Customer")
+      }
+      else {
+        res.set({ 'status': '200' });
+        res.status(200).json(data)
+      }
+    });
+  };
+});
+  
+
 app.put('/test', verifyToken, (req, res) => {
   makedata = {
     a: "aaaa",

@@ -11,7 +11,14 @@ var customerSchema = Schema({
     password: String,
     firstname: String,
     lastname: String,
-    phone: String,
+    phone: {
+        type: String,
+        unique: true
+    },
+    personalid :{
+        type: Number,
+        unique: true
+    },
     address: String,
     allergy_history: String,
     birthday: Date,
