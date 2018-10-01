@@ -327,7 +327,7 @@ app.put('/queue/booking', verifyToken, (req, res) => {
       if (checkAppointment_Date) {  // หากวันที่นัดตรงกับวันที่ปัจจุบันให้ทำ ...
         if (findQueue != null && findQueue.status == "appointment") {
           if (findRoom_usage != null && findRoom_usage.status == 'active') {
-            Queue.findByIdAndUpdate(req.body.id, {room_usage: findRoom_usage._id, status: "booking_queue", queue_order: QueueBefore + 1, priority: priority, queue_date: dateNow }, { new: true }, (err, data) => {
+            Queue.findByIdAndUpdate(req.body.id, { room_usage: findRoom_usage._id, status: "booking_queue", queue_order: QueueBefore + 1, priority: priority, queue_date: dateNow }, { new: true }, (err, data) => {
               if (err) {
                 res.set({ 'status': '400' });
                 res.status(400).json(err)
@@ -707,20 +707,18 @@ app.put('/room_usage', verifyToken, (req, res) => {
 });
 
 app.get('/customer', (req, res) => {
-  if (req.query.id) {
-    Customer.findOne({personalid:req.query.personalid}).exec(function (err, data) {
-      if (err) {
-        res.set({ 'status': '404' });
-        res.status(404).json("Not Found Customer")
-      }
-      else {
-        res.set({ 'status': '200' });
-        res.status(200).json(data)
-      }
-    });
-  };
+  Customer.findOne({ personalid: req.query.personalid }).exec(function (err, data) {
+    if (err) {
+      res.set({ 'status': '404' });
+      res.status(404).json("Not Found Customer")
+    }
+    else {
+      res.set({ 'status': '200' });
+      res.status(200).json(data)
+    }
+  });
 });
-  
+
 
 app.put('/test', verifyToken, (req, res) => {
   makedata = {
