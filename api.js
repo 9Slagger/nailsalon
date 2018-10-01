@@ -661,12 +661,16 @@ app.delete('/room', verifyToken, (req, res) => {
 
 // ---------- post room_usage
 app.post('/room_usage', verifyToken, (req, res) => {
+  console.log("point 1")
   Room.findById(req.body.room, (err, data) => {
+    console.log("point 2")
     if (err) {
+      console.log("point 3")
       res.set({ 'status': '404' });
       res.status(404).json("Not Found Room")
     }
     else {
+      console.log("point 4")
       let room_usage = new Room_usage({
         _id: new mongoose.Types.ObjectId(),
 
@@ -680,15 +684,19 @@ app.post('/room_usage', verifyToken, (req, res) => {
         record_date: new Date()
       });
       room_usage.save({ new: true }, function (err, data) {
+        console.log("point 5")
         if (err) {
+          console.log("point 6")
           res.set({ 'status': '404' });
           res.status(400).json(err)
         }
         else {
+          console.log("point 7")
           res.set({ 'status': '201' });
           res.status(201).json(data)
         }
       });
+      console.log("point 8")
     }
   });
 });
