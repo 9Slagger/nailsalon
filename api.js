@@ -432,6 +432,77 @@ app.get('/queue/booking', (req, res) => {
     }
   });
 })
+// ---------- Monitor Queue
+app.get('/monitor/queue', (req, res) => {
+  var year = req.query.year
+  var month = parseInt(req.query.month)
+  month = month - 1
+  var day = req.query.day
+  var nextday = parseInt(day) + 1
+  midnight_date = new Date(year, month, day, 0, 0, 0);
+  nextdate = new Date(year, month, nextday, 0, 0, 0);
+  Queue.find({ queue_date: { $gte: midnight_date, $lt: nextdate } }).populate('room_usage').exec(function (err, data) {
+    if (err) {
+      res.set({ 'status': '404' });
+      res.status(404).json("Not Found Queue")
+    }
+    else {
+      var room1_active = data.filter((infor) => {  //คิวที่อยู่ในห้องทำฟัน
+        return infor.room_usage.room_name == 1 && infor.status == "active"
+      })
+      if(room1_active.length === 0) {
+        var room1_active = [{queue_order: '',priority: '',room_usage:{room_name: ''}}]
+      }
+      const room1_priority2 = data.filter((infor) => { //คิวที่กำลังนั่งรอพบแพทย์และจองมาล่วงหน้า
+        return infor.room_usage.room_name == 1 && infor.priority == 2 && infor.status == "booking_queue"
+      })
+      const room1_priority1 = data.filter((infor) => { //คิวที่กำลังนั่งรอพบแพทย์และไม่ได้จองมาล่วงหน้า
+        return infor.room_usage.room_name == 1 && infor.priority == 1 && infor.status == "booking_queue"
+      })
+      temp_room1_priority2 = {priority2: room1_priority2.length}
+      temp_room1_priority1 = {priority1: room1_priority1.length}
+      totalroom1 = room1_priority1.length+room1_priority2.length
+      room1 = {room1:{active:room1_active[0],priority2: room1_priority2.length,priority1: room1_priority1.length,totalroom1}}
+
+      var room2_active = data.filter((infor) => {  //คิวที่อยู่ในห้องทำฟัน
+        return infor.room_usage.room_name == 2 && infor.status == "active"
+      })
+      if(room2_active.length === 0) {
+        var room2_active = [{queue_order: '',priority: '',room_usage:{room_name: ''}}]
+      }
+      const room2_priority2 = data.filter((infor) => { //คิวที่กำลังนั่งรอพบแพทย์และจองมาล่วงหน้า
+        return infor.room_usage.room_name == 2 && infor.priority == 2 && infor.status == "booking_queue"
+      })
+      const room2_priority1 = data.filter((infor) => { //คิวที่กำลังนั่งรอพบแพทย์และไม่ได้จองมาล่วงหน้า
+        return infor.room_usage.room_name == 2 && infor.priority == 1 && infor.status == "booking_queue"
+      })
+      temp_room2_priority2 = {priority2: room2_priority2.length}
+      temp_room2_priority1 = {priority1: room2_priority1.length}
+      totalroom2 = room2_priority1.length+room2_priority2.length
+      room2 = {room2:{active:room2_active[0],priority2: room2_priority2.length,priority1: room2_priority1.length,totalroom2}}
+
+      var room3_active = data.filter((infor) => {  //คิวที่อยู่ในห้องทำฟัน
+        return infor.room_usage.room_name == 3 && infor.status == "active"
+      })
+      if(room3_active.length === 0) {
+        var room3_active = [{queue_order: '',priority: '',room_usage:{room_name: ''}}]
+      }
+      const room3_priority2 = data.filter((infor) => { //คิวที่กำลังนั่งรอพบแพทย์และจองมาล่วงหน้า
+        return infor.room_usage.room_name == 3 && infor.priority == 2 && infor.status == "booking_queue"
+      })
+      const room3_priority1 = data.filter((infor) => { //คิวที่กำลังนั่งรอพบแพทย์และไม่ได้จองมาล่วงหน้า
+        return infor.room_usage.room_name == 3 && infor.priority == 1 && infor.status == "booking_queue"
+      })
+      temp_room3_priority2 = {priority2: room3_priority2.length}
+      temp_room3_priority1 = {priority1: room3_priority1.length}
+      totalroom3 = room3_priority1.length+room3_priority2.length
+      room3 = {room3:{active:room3_active[0],priority2: room3_priority2.length,priority1: room3_priority1.length,totalroom3}}
+      res.set({ 'status': '200' });
+      res.status(200).json([room1,room2,room3])
+    }
+  });
+})
+
 
 // ---------- ค้าหา queue ทั้งหมด
 app.get('/queue', (req, res) => {
