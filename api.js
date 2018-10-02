@@ -455,10 +455,10 @@ app.get('/monitor/queue', (req, res) => {
         var room1_active = [{queue_order: '',priority: '',room_usage:{room_name: ''}}]
       }
       const room1_priority2 = data.filter((infor) => { //คิวที่กำลังนั่งรอพบแพทย์และจองมาล่วงหน้า
-        return infor.room_usage.room_name == 1 && infor.priority == 2 && infor.status == "booking_queue"
+        return infor.room_usage.room_name == 1 && infor.priority == "A" && infor.status == "booking_queue"
       })
       const room1_priority1 = data.filter((infor) => { //คิวที่กำลังนั่งรอพบแพทย์และไม่ได้จองมาล่วงหน้า
-        return infor.room_usage.room_name == 1 && infor.priority == 1 && infor.status == "booking_queue"
+        return infor.room_usage.room_name == 1 && infor.priority == "B" && infor.status == "booking_queue"
       })
       temp_room1_priority2 = {priority2: room1_priority2.length}
       temp_room1_priority1 = {priority1: room1_priority1.length}
@@ -472,10 +472,10 @@ app.get('/monitor/queue', (req, res) => {
         var room2_active = [{queue_order: '',priority: '',room_usage:{room_name: ''}}]
       }
       const room2_priority2 = data.filter((infor) => { //คิวที่กำลังนั่งรอพบแพทย์และจองมาล่วงหน้า
-        return infor.room_usage.room_name == 2 && infor.priority == 2 && infor.status == "booking_queue"
+        return infor.room_usage.room_name == 2 && infor.priority == "A" && infor.status == "booking_queue"
       })
       const room2_priority1 = data.filter((infor) => { //คิวที่กำลังนั่งรอพบแพทย์และไม่ได้จองมาล่วงหน้า
-        return infor.room_usage.room_name == 2 && infor.priority == 1 && infor.status == "booking_queue"
+        return infor.room_usage.room_name == 2 && infor.priority == "B" && infor.status == "booking_queue"
       })
       temp_room2_priority2 = {priority2: room2_priority2.length}
       temp_room2_priority1 = {priority1: room2_priority1.length}
@@ -489,10 +489,10 @@ app.get('/monitor/queue', (req, res) => {
         var room3_active = [{queue_order: '',priority: '',room_usage:{room_name: ''}}]
       }
       const room3_priority2 = data.filter((infor) => { //คิวที่กำลังนั่งรอพบแพทย์และจองมาล่วงหน้า
-        return infor.room_usage.room_name == 3 && infor.priority == 2 && infor.status == "booking_queue"
+        return infor.room_usage.room_name == 3 && infor.priority == "A" && infor.status == "booking_queue"
       })
       const room3_priority1 = data.filter((infor) => { //คิวที่กำลังนั่งรอพบแพทย์และไม่ได้จองมาล่วงหน้า
-        return infor.room_usage.room_name == 3 && infor.priority == 1 && infor.status == "booking_queue"
+        return infor.room_usage.room_name == 3 && infor.priority == "B" && infor.status == "booking_queue"
       })
       temp_room3_priority2 = {priority2: room3_priority2.length}
       temp_room3_priority1 = {priority1: room3_priority1.length}
