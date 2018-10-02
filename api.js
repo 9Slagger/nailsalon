@@ -278,9 +278,9 @@ app.put('/queue/booking', verifyToken, (req, res) => {
 
   function checkPriority(dateNow, record_date) {
     if (record_date.getDate() == dateNow.getDate() && record_date.getMonth() == dateNow.getMonth() && record_date.getFullYear() == dateNow.getFullYear()) {
-      return 1
+      return "B"
     }
-    else return 2
+    else return "A"
   }
   function checkAppointment_Date(dateNow, appointment_date) {
     if (appointment_date.getDate() == dateNow.getDate() && appointment_date.getMonth() == dateNow.getMonth() && appointment_date.getFullYear() == dateNow.getFullYear()) {
