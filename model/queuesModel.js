@@ -14,7 +14,7 @@ var queueSchema = Schema({
     record_date: Date,//วันเวลาที่บันทึกการนัด
 
     queue_order: Number,//ลำดับคิว
-    priority: Number,//ลำดับความสำคัญ
+    priority: String,//ลำดับความสำคัญ
     queue_date: Date,//วันเวลาที่รับคิว
 
     status: String,

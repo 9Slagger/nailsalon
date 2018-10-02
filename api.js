@@ -322,6 +322,7 @@ app.put('/queue/booking', verifyToken, (req, res) => {
       }
       findRoom_usage = await findRoom_usage(findQueue.doctor, midnight_date); // เก็บข้อมูลของห้องของหมอที่คนไข้ปัจจุบันนัดไว้
       var priority = await checkPriority(dateNow, findQueue.record_date);  // เก็บ priority Queue ปัจจุบัน
+      console.log(priority)
       checkAppointment_Date = await checkAppointment_Date(dateNow, findQueue.appointment_date);  // เช็คว่า Queue ที่นัดไว้ตรงกับวันที่ปัจจุบันไหม
       var QueueBefore = await checkQueueBefore(priority, findQueue.doctor, midnight_date);  //เช็ควันที่ของคิวนี้กับวันนที่ของคิวล่าสุดที่จองหมอคนเดียวกันและpriorityเท่ากัน
       if (checkAppointment_Date) {  // หากวันที่นัดตรงกับวันที่ปัจจุบันให้ทำ ...
