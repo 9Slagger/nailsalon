@@ -443,7 +443,7 @@ app.get('/monitor/queue', (req, res) => {
   midnight_date = new Date(year, month, day, 0, 0, 0);
   nextdate = new Date(year, month, nextday, 0, 0, 0);
   Queue.find({ queue_date: { $gte: midnight_date, $lt: nextdate } }).populate('room_usage').exec(function (err, data) {
-    console.log(data)
+    console.log(data,err)
     if (err) {
       res.set({ 'status': '404' });
       res.status(404).json("Not Found Queue")
