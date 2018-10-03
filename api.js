@@ -267,7 +267,6 @@ app.post('/queue', verifyToken, (req, res) => {
 
 // ----------รับ Queue ขั้นตอนการรับคิว
 app.put('/queue/booking', verifyToken, (req, res) => {
-  console.log(res.body + " test")
   async function findQueue(Queue_id) {
     return await Queue.findById(Queue_id).exec();
   }
@@ -308,7 +307,6 @@ app.put('/queue/booking', verifyToken, (req, res) => {
     try {
       var dateNow = new Date();
       dateNow.setHours(dateNow.getHours() + 7);
-      console.log(dateNow)
       midnight_date = await dateNow
       await midnight_date.setHours(0)
       await midnight_date.setMinutes(0)
@@ -322,7 +320,6 @@ app.put('/queue/booking', verifyToken, (req, res) => {
       }
       findRoom_usage = await findRoom_usage(findQueue.doctor, midnight_date); // เก็บข้อมูลของห้องของหมอที่คนไข้ปัจจุบันนัดไว้
       var priority = await checkPriority(dateNow, findQueue.record_date);  // เก็บ priority Queue ปัจจุบัน
-      console.log(priority)
       checkAppointment_Date = await checkAppointment_Date(dateNow, findQueue.appointment_date);  // เช็คว่า Queue ที่นัดไว้ตรงกับวันที่ปัจจุบันไหม
       var QueueBefore = await checkQueueBefore(priority, findQueue.doctor, midnight_date);  //เช็ควันที่ของคิวนี้กับวันนที่ของคิวล่าสุดที่จองหมอคนเดียวกันและpriorityเท่ากัน
       if (checkAppointment_Date) {  // หากวันที่นัดตรงกับวันที่ปัจจุบันให้ทำ ...
@@ -361,6 +358,21 @@ app.put('/queue/booking', verifyToken, (req, res) => {
     }
   }
 });
+
+// ---------- เปลี่ยนสถานะ queue
+app.put('/queue/status', verifyToken, (req, res) => {
+  Queue.findByIdAndUpdate(req.body.queue, {status: "active"},{ new: true }).exec(function (err, data) {
+    if(err) {
+      res.set({ 'status': '400' });
+      res.status(400).json(err)
+    }
+    else {
+      res.set({ 'status': '201' });
+      res.status(201).json(data)
+    }
+  })
+})
+  
 
 // ---------- ค้าหา queue "ที่นัดหมายไว้" จากวันเดือนปีที่กำหนด
 app.get('/queue/appointment', (req, res) => {
