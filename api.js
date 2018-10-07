@@ -361,8 +361,8 @@ app.put('/queue/booking', verifyToken, (req, res) => {
 
 // ---------- เปลี่ยนสถานะ queue
 app.put('/queue/status', verifyToken, (req, res) => {
-  Queue.findByIdAndUpdate(req.body.queue, {status: "active"},{ new: true }).exec(function (err, data) {
-    if(err) {
+  Queue.findByIdAndUpdate(req.body.queue, { status: "active" }, { new: true }).exec(function (err, data) {
+    if (err) {
       res.set({ 'status': '400' });
       res.status(400).json(err)
     }
@@ -372,7 +372,7 @@ app.put('/queue/status', verifyToken, (req, res) => {
     }
   })
 })
-  
+
 
 // ---------- ค้าหา queue "ที่นัดหมายไว้" จากวันเดือนปีที่กำหนด
 app.get('/queue/appointment', (req, res) => {
@@ -463,8 +463,8 @@ app.get('/monitor/queue', (req, res) => {
       var room1_active = data.filter((infor) => {  //คิวที่อยู่ในห้องทำฟัน
         return infor.room_usage.room_name == 1 && infor.status == "active"
       })
-      if(room1_active.length === 0) {
-        var room1_active = [{queue_order: '',priority: '',room_usage:{room_name: ''}}]
+      if (room1_active.length === 0) {
+        var room1_active = [{ queue_order: '', priority: '', room_usage: { room_name: '' } }]
       }
       const room1_priority2 = data.filter((infor) => { //คิวที่กำลังนั่งรอพบแพทย์และจองมาล่วงหน้า
         return infor.room_usage.room_name == 1 && infor.priority == "A" && infor.status == "booking_queue"
@@ -472,16 +472,16 @@ app.get('/monitor/queue', (req, res) => {
       const room1_priority1 = data.filter((infor) => { //คิวที่กำลังนั่งรอพบแพทย์และไม่ได้จองมาล่วงหน้า
         return infor.room_usage.room_name == 1 && infor.priority == "B" && infor.status == "booking_queue"
       })
-      temp_room1_priority2 = {priority2: room1_priority2.length}
-      temp_room1_priority1 = {priority1: room1_priority1.length}
-      totalroom1 = room1_priority1.length+room1_priority2.length
-      room1 = {room1:{active:room1_active[0],priority2: room1_priority2.length,priority1: room1_priority1.length,totalroom1}}
+      temp_room1_priority2 = { priority2: room1_priority2.length }
+      temp_room1_priority1 = { priority1: room1_priority1.length }
+      totalroom1 = room1_priority1.length + room1_priority2.length
+      room1 = { room1: { active: room1_active[0], priority2: room1_priority2.length, priority1: room1_priority1.length, totalroom1 } }
 
       var room2_active = data.filter((infor) => {  //คิวที่อยู่ในห้องทำฟัน
         return infor.room_usage.room_name == 2 && infor.status == "active"
       })
-      if(room2_active.length === 0) {
-        var room2_active = [{queue_order: '',priority: '',room_usage:{room_name: ''}}]
+      if (room2_active.length === 0) {
+        var room2_active = [{ queue_order: '', priority: '', room_usage: { room_name: '' } }]
       }
       const room2_priority2 = data.filter((infor) => { //คิวที่กำลังนั่งรอพบแพทย์และจองมาล่วงหน้า
         return infor.room_usage.room_name == 2 && infor.priority == "A" && infor.status == "booking_queue"
@@ -489,16 +489,16 @@ app.get('/monitor/queue', (req, res) => {
       const room2_priority1 = data.filter((infor) => { //คิวที่กำลังนั่งรอพบแพทย์และไม่ได้จองมาล่วงหน้า
         return infor.room_usage.room_name == 2 && infor.priority == "B" && infor.status == "booking_queue"
       })
-      temp_room2_priority2 = {priority2: room2_priority2.length}
-      temp_room2_priority1 = {priority1: room2_priority1.length}
-      totalroom2 = room2_priority1.length+room2_priority2.length
-      room2 = {room2:{active:room2_active[0],priority2: room2_priority2.length,priority1: room2_priority1.length,totalroom2}}
+      temp_room2_priority2 = { priority2: room2_priority2.length }
+      temp_room2_priority1 = { priority1: room2_priority1.length }
+      totalroom2 = room2_priority1.length + room2_priority2.length
+      room2 = { room2: { active: room2_active[0], priority2: room2_priority2.length, priority1: room2_priority1.length, totalroom2 } }
 
       var room3_active = data.filter((infor) => {  //คิวที่อยู่ในห้องทำฟัน
         return infor.room_usage.room_name == 3 && infor.status == "active"
       })
-      if(room3_active.length === 0) {
-        var room3_active = [{queue_order: '',priority: '',room_usage:{room_name: ''}}]
+      if (room3_active.length === 0) {
+        var room3_active = [{ queue_order: '', priority: '', room_usage: { room_name: '' } }]
       }
       const room3_priority2 = data.filter((infor) => { //คิวที่กำลังนั่งรอพบแพทย์และจองมาล่วงหน้า
         return infor.room_usage.room_name == 3 && infor.priority == "A" && infor.status == "booking_queue"
@@ -506,12 +506,12 @@ app.get('/monitor/queue', (req, res) => {
       const room3_priority1 = data.filter((infor) => { //คิวที่กำลังนั่งรอพบแพทย์และไม่ได้จองมาล่วงหน้า
         return infor.room_usage.room_name == 3 && infor.priority == "B" && infor.status == "booking_queue"
       })
-      temp_room3_priority2 = {priority2: room3_priority2.length}
-      temp_room3_priority1 = {priority1: room3_priority1.length}
-      totalroom3 = room3_priority1.length+room3_priority2.length
-      room3 = {room3:{active:room3_active[0],priority2: room3_priority2.length,priority1: room3_priority1.length,totalroom3}}
+      temp_room3_priority2 = { priority2: room3_priority2.length }
+      temp_room3_priority1 = { priority1: room3_priority1.length }
+      totalroom3 = room3_priority1.length + room3_priority2.length
+      room3 = { room3: { active: room3_active[0], priority2: room3_priority2.length, priority1: room3_priority1.length, totalroom3 } }
       res.set({ 'status': '200' });
-      res.status(200).json([room1,room2,room3])
+      res.status(200).json([room1, room2, room3])
     }
   });
 })
@@ -540,6 +540,26 @@ app.get('/queue', (req, res) => {
       else {
         res.set({ 'status': '200' });
         res.status(200).json(data)
+      }
+    });
+  }
+  else if (req.query.personalid && req.query.status) {
+    Customer.findOne({ personalid: req.query.personalid }).exec(function (err_customer, data_customer) {
+      if (err_customer) {
+        res.set({ 'status': '404' });
+        res.status(404).json("Not Found Customer")
+      }
+      else {
+        Queue.find({ customer: data_customer._id, status: req.query.status }).exec(function (err, data) {
+          if (err) {
+            res.set({ 'status': '404' });
+            res.status(404).json("Not Found Queue")
+          }
+          else {
+            res.set({ 'status': '200' });
+            res.status(200).json(data)
+          }
+        });
       }
     });
   }
