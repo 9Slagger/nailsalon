@@ -737,6 +737,20 @@ app.post('/room', verifyToken, (req, res) => {
   });
 });
 
+// ---------- get room
+app.get('/room', verifyToken, (req, res) => {
+  Room.find().exec(function (err, data) {
+    if (err) {
+      res.set({ 'status': '400' });
+      res.status(400).json(err)
+    }
+    else {
+      res.set({ 'status': '200' });
+      res.status(200).json(data)
+    }
+  })  
+});
+
 // ---------- get doctor
 app.get('/doctor', verifyToken, (req, res) => {
   Doctor.find().exec(function (err, data) {
