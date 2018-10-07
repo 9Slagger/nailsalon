@@ -546,11 +546,14 @@ app.get('/queue', (req, res) => {
   else if (req.query.personalid && req.query.status) {
     console.log("point 1")
     Customer.findOne({ personalid: req.query.personalid }).exec(function (err_customer, data_customer) {
+      console.log("point 2")
       if (err_customer) {
+        console.log("point 3")
         res.set({ 'status': '404' });
         res.status(404).json("Not Found Customer")
       }
       else {
+        console.log("point 4")
         Queue.find({ customer: data_customer._id, status: req.query.status }).exec(function (err, data) {
           if (err) {
             res.set({ 'status': '404' });
