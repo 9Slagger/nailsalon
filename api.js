@@ -544,6 +544,7 @@ app.get('/queue', (req, res) => {
     });
   }
   else if (req.query.personalid && req.query.status) {
+    console.log("point 1")
     Customer.findOne({ personalid: req.query.personalid }).exec(function (err_customer, data_customer) {
       if (err_customer) {
         res.set({ 'status': '404' });
