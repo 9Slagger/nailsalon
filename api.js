@@ -131,6 +131,7 @@ app.post('/customer/login', (req, res) => {
         var token = getToken({ id: _id, username: _username, type: _type })
 
         const finalResult = {
+          id: _id,
           result: "Customer Login success",
           token: token
         };
