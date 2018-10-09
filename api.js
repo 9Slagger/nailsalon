@@ -838,8 +838,8 @@ app.post('/room_usage', verifyToken, (req, res) => {
 app.put('/room_usage', verifyToken, (req, res) => {
   Room_usage.findOneAndUpdate({ _id: req.body.id }, { status: req.body.status }, { new: true }, (err, data) => {
     if (data) {
-      res.set({ 'status': '200' });
-      res.status(200).json(data)
+      res.set({ 'status': '201' });
+      res.status(201).json(data)
     }
     else {
       res.set({ 'status': '400' });
