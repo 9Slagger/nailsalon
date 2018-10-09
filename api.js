@@ -554,7 +554,7 @@ app.get('/queue', (req, res) => {
       }
       else {
         console.log("point 4")
-        Queue.find({ customer: data_customer._id, status: req.query.status }).populate('customer').exec(function (err, data) {
+        Queue.find({ customer: data_customer._id, status: req.query.status }).populate('customer').populate('doctor').exec(function (err, data) {
           if (err) {
             res.set({ 'status': '404' });
             res.status(404).json("Not Found Queue")
