@@ -533,7 +533,7 @@ app.get('/queue', (req, res) => {
     });
   }
   else if (req.query.customer_id && req.query.status) {
-    Queue.find({ customer: req.query.customer_id, status: req.query.status }).exec(function (err, data) {
+    Queue.find({ customer: req.query.customer_id, status: req.query.status }).populate('customer').populate('doctor').exec(function (err, data) {
       if (err) {
         res.set({ 'status': '404' });
         res.status(404).json("Not Found Queue")
