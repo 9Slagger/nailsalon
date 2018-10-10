@@ -446,6 +446,7 @@ app.get('/queue/booking', (req, res) => {
     }
   });
 })
+
 // ---------- Monitor Queue
 app.get('/monitor/queue', (req, res) => {
   var year = req.query.year
@@ -835,6 +836,26 @@ app.post('/room_usage', verifyToken, (req, res) => {
     }
   });
 });
+
+app.get('/room_usage', verifyToken, (req, res) => {
+  let year = req.query.year
+  let month = parseInt(req.query.month)
+  month = month - 1
+  let day = req.query.day
+  let nextday = parseInt(day) + 1
+  midnight_date = new Date(year, month, day, 0, 0, 0);
+  nextdate = new Date(year, month, nextday, 0, 0, 0);
+  Room_usage.find({ record_date: { $gte: midnight_date, $lt: nextdate } }).exec(function (err, data) {
+    if(err) {
+      res.set({ 'status': '404' });
+      res.status(400).json(err)
+    }
+    else {
+      res.set({ 'status': '200' });
+      res.status(200).json(data)
+    }
+  })
+})
 
 app.put('/room_usage', verifyToken, (req, res) => {
   Room_usage.findOneAndUpdate({ _id: req.body.id }, { status: req.body.status }, { new: true }, (err, data) => {
