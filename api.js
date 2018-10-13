@@ -907,40 +907,4 @@ app.put('/test', verifyToken, (req, res) => {
   res.status(200).json(makedata)
 });
 
-// Queue.find({ '_id': '5ba91f3e5dcc1c001524c151' }).populate('room_usage').exec(function (err, data) {
-//   if (err) return handleError(err);
-//   console.log(data);
-// });
-
-// Queue.remove({}, (err) => {
-//   if(err) {
-//       console.log(err);
-//   }
-//   console.log('remove successfully.');
-// })
-
-// var data_temp = {
-//   set doctor_id(id) {
-//     this.id = id
-//   },
-//   get doctor_id() {
-//     if (this.id == 0) {
-//       return undefined;
-//     }
-//     return this.id;
-//   },
-//   set current(name) {
-//     this.name = name
-//   },
-//   get current() {
-//     if (this.name == 0) {
-//       return undefined;
-//     }
-//     return this.name;
-//   },
-// }
-//
-//
-console.log(new Date())
-
 module.exports = app;
