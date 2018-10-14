@@ -872,7 +872,7 @@ app.put('/room_usage', verifyToken, (req, res) => {
 
 app.get('/customer', (req, res) => {
   if (req.query.personalid) {
-    Customer.findOne({ personalid: req.query.personalid }).exec(function (err, data) {
+    Customer.findOne({ personalid: req.query.personalid }, (err, data) => {
       console.log(err)
       if (err) {
         res.set({ 'status': '404' });
@@ -882,7 +882,7 @@ app.get('/customer', (req, res) => {
         res.set({ 'status': '200' });
         res.status(200).json(data)
       }
-    });
+    })
   }
   else if (req.query.phone != null) {
     Customer.findOne({ phone: req.query.phone }).exec(function (err, data) {
