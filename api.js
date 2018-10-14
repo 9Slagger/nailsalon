@@ -809,6 +809,8 @@ app.post('/room_usage', verifyToken, (req, res) => {
       console.log("point 4")
       let timezone = new Date().getTimezoneOffset();
       timezone = timezone / 60 * (-1)
+      let date = new Date(xiYear, xiMonth, xiDate);
+      date.setTime(date.getHours() + timezone);
       let room_usage = new Room_usage({
         _id: new mongoose.Types.ObjectId(),
 
@@ -819,7 +821,7 @@ app.post('/room_usage', verifyToken, (req, res) => {
 
         status: "pending",
         usage_date: req.body.usage_date,
-        record_date: new Date(Date.UTC(year, month, day, hour, minute, second))
+        record_date: date
       });
       room_usage.save({ new: true }, function (err, data) {
         console.log("point 5")
