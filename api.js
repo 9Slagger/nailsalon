@@ -807,8 +807,7 @@ app.post('/room_usage', verifyToken, (req, res) => {
     }
     else {
       console.log("point 4")
-      let timezone = new Date().getTimezoneOffset();
-      timezone = timezone / 60 * (-1)
+      let timezone = 7
       let date = new Date();
       date.setHours(date.getHours() + timezone);
       console.log('timezone= '+timezone+' date= '+ date)
