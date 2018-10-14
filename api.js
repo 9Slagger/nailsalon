@@ -885,13 +885,13 @@ app.get('/customer', (req, res) => {
   }
   else if (req.query.phone) {
     Customer.findOne({ phone: req.query.phone }).exec(function (err, data) {
-      if (err) {
-        res.set({ 'status': '404' });
-        res.status(404).json("Not Found Customer")
-      }
-      else {
+      if (data) {
         res.set({ 'status': '200' });
         res.status(200).json(data)
+      }
+      else {
+        res.set({ 'status': '404' });
+        res.status(404).json("Not Found Customer")
       }
     });
   }
