@@ -809,8 +809,8 @@ app.post('/room_usage', verifyToken, (req, res) => {
       console.log("point 4")
       let timezone = new Date().getTimezoneOffset();
       timezone = timezone / 60 * (-1)
-      let date = new Date(xiYear, xiMonth, xiDate);
-      date.setTime(date.getHours() + timezone);
+      let date = new Date();
+      date.setHours(date.getHours() + timezone);
       let room_usage = new Room_usage({
         _id: new mongoose.Types.ObjectId(),
 
