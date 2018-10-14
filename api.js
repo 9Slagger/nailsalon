@@ -750,7 +750,7 @@ app.get('/room', verifyToken, (req, res) => {
       res.set({ 'status': '200' });
       res.status(200).json(data)
     }
-  })  
+  })
 });
 
 // ---------- get doctor
@@ -807,6 +807,8 @@ app.post('/room_usage', verifyToken, (req, res) => {
     }
     else {
       console.log("point 4")
+      let timezone = new Date().getTimezoneOffset();
+      timezone = timezone / 60 * (-1)
       let room_usage = new Room_usage({
         _id: new mongoose.Types.ObjectId(),
 
@@ -817,7 +819,7 @@ app.post('/room_usage', verifyToken, (req, res) => {
 
         status: "pending",
         usage_date: req.body.usage_date,
-        record_date: new Date()
+        record_date: new Date(Date.UTC(year, month, day, hour, minute, second))
       });
       room_usage.save({ new: true }, function (err, data) {
         console.log("point 5")
@@ -845,8 +847,8 @@ app.get('/room_usage', verifyToken, (req, res) => {
   let nextday = parseInt(day) + 1
   midnight_date = new Date(year, month, day, 0, 0, 0);
   nextdate = new Date(year, month, nextday, 0, 0, 0);
-  Room_usage.find({ record_date: { $gte: midnight_date, $lt: nextdate } }).exec(function (err, data) {
-    if(err) {
+  Room_usage.find({ usage_date: { $gte: midnight_date, $lt: nextdate } }).exec(function (err, data) {
+    if (err) {
       res.set({ 'status': '404' });
       res.status(400).json(err)
     }
