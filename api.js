@@ -811,6 +811,7 @@ app.post('/room_usage', verifyToken, (req, res) => {
       timezone = timezone / 60 * (-1)
       let date = new Date();
       date.setHours(date.getHours() + timezone);
+      console.log('timezone= '+timezone+' date= '+ date)
       let room_usage = new Room_usage({
         _id: new mongoose.Types.ObjectId(),
 
