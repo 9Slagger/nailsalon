@@ -873,6 +873,7 @@ app.put('/room_usage', verifyToken, (req, res) => {
 app.get('/customer', (req, res) => {
   if (req.query.personalid) {
     Customer.findOne({ personalid: req.query.personalid }).exec(function (err, data) {
+      console.log(err)
       if (err) {
         res.set({ 'status': '404' });
         res.status(404).json("Not Found Customer")
