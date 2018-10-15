@@ -901,6 +901,32 @@ app.get('/customer', (req, res) => {
   }
 });
 
+app.put('/queue/active', verifyToken, (req,res) => {
+  Queue.findByIdAndUpdate(req.body.id, { status: "active" }, { new: true }, (err, data) => {
+    if (err) {
+      res.set({ 'status': '400' });
+      res.status(400).json(err)
+    }
+    else {
+      res.set({ 'status': '201' });
+      res.status(201).json(data)
+    }
+  });
+})
+
+app.put('/queue/awaitingpayment', verifyToken, (req,res) => {
+  Queue.findByIdAndUpdate(req.body.id, { status: "awaitingpayment" }, { new: true }, (err, data) => {
+    if (err) {
+      res.set({ 'status': '400' });
+      res.status(400).json(err)
+    }
+    else {
+      res.set({ 'status': '201' });
+      res.status(201).json(data)
+    }
+  });
+})
+
 
 app.put('/test', verifyToken, (req, res) => {
   makedata = {
