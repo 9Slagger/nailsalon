@@ -911,7 +911,7 @@ app.put('/queue/active', verifyToken, (req,res) => {
       res.set({ 'status': '201' });
       res.status(201).json(data)
     }
-  });
+  }).populate('room_usage')
 })
 
 app.put('/queue/awaitingpayment', verifyToken, (req,res) => {
