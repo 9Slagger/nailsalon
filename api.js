@@ -335,7 +335,7 @@ app.put('/queue/booking', verifyToken, (req, res) => {
                 res.set({ 'status': '201' });
                 res.status(201).json(data)
               }
-            });
+            }).populate('room_usage');
           }
           else {
             res.set({ 'status': '400' });
