@@ -226,6 +226,10 @@ app.post('/queue', verifyToken, (req, res) => {
       data_doctor = await findDoctor(req.body.doctor);
       if (data_customer != null) {
         if (data_doctor != null) {
+          let timezone = 7
+          let dateNow = new Date()
+          dateNow.setHours(dateNow.getHours() + timezone)
+
           let queue = new Queue({
             customer: req.body.customer,
             employee: req.id,
@@ -235,7 +239,7 @@ app.post('/queue', verifyToken, (req, res) => {
             description: req.body.description || "รายละเอียดบลาๆ",
 
             appointment_date: req.body.appointment_date,
-            record_date: new Date(),
+            record_date: dateNow,
 
             status: "appointment"
           })
