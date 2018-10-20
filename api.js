@@ -411,7 +411,7 @@ app.get('/queue/active', (req, res) => {
   let timezone = 7
   midnight_date = new Date(year, month, day, 0, 0, 0);
   nextdate = new Date(year, month, nextday, 0, 0, 0);
-  Queue.find({ status: "active", queue_date: { $gte: midnight_date, $lt: nextdate } }).populate('room_usage').exec(function (err, data) {
+  Queue.find({ status: "active", queue_date: { $gte: midnight_date, $lt: nextdate } }).populate('room_usage').populate('customer').populate('doctor').exec(function (err, data) {
     if (err) {
       res.set({ 'status': '404' });
       res.status(404).json("Not Found Queue")
@@ -435,7 +435,7 @@ app.get('/queue/booking', (req, res) => {
   let timezone = 7
   midnight_date = new Date(year, month, day, 0, 0, 0);
   nextdate = new Date(year, month, nextday, 0, 0, 0);
-  Queue.find({ status: "booking_queue", queue_date: { $gte: midnight_date, $lt: nextdate } }).populate('room_usage').exec(function (err, data) {
+  Queue.find({ status: "booking_queue", queue_date: { $gte: midnight_date, $lt: nextdate } }).populate('room_usage').populate('customer').populate('doctor').exec(function (err, data) {
     if (err) {
       res.set({ 'status': '404' });
       res.status(404).json("Not Found Queue")
