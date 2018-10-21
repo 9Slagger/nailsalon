@@ -379,7 +379,8 @@ app.put('/queue/status', verifyToken, (req, res) => {
 })
 
 app.put('/queue/bill', verifyToken, (req, res) => {
-  Queue.findByIdAndUpdate(req.body.id, { price: req.body.price, treatment_history: req.body.treatment_history }, { new: true }, (err, data) => {
+  // Queue.findByIdAndUpdate(req.body.id, { price: req.body.price, treatment_history: req.body.treatment_history }, { new: true }, (err, data) => {
+  Queue.findByIdAndUpdate("5bcb601fbf79050015205900", { price: 1400, treatment_history: "ขูดหินปูน" }, { new: true }, (err, data) => {
     if (err) {
       res.set({ 'status': '400' });
       res.status(400).json(err)
