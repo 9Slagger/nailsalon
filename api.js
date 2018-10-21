@@ -158,7 +158,12 @@ app.post('/doctor/register', (req, res) => {
     _id: new mongoose.Types.ObjectId(),
     username: req.body.username,
     password: req.body.password,
-    age: req.body.age || 15
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    phone: req.body.phone,
+    address: req.body.address,
+    birthday: req.body.birthday,
+    record_date: new Date()
   });
   doctor.save(function (err, data) {
     if (err) {
