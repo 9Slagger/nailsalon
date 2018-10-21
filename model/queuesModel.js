@@ -18,6 +18,9 @@ var queueSchema = Schema({
     queue_date: Date,//วันเวลาที่รับคิว
 
     status: String,
+
+    price: Number,
+    treatment_history: String
 });
 
 var Queue = mongoose.model('Queue', queueSchema);

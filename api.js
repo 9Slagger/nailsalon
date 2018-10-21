@@ -378,6 +378,19 @@ app.put('/queue/status', verifyToken, (req, res) => {
   })
 })
 
+app.put('/queue/bill', verifyToken, (req, res) => {
+  Queue.findByIdAndUpdate(req.body.id, { price: req.body.price, treatment_history: req.body.treatment_history }, { new: true }, (err, data) => {
+    if (err) {
+      res.set({ 'status': '400' });
+      res.status(400).json(err)
+    }
+    else {
+      res.set({ 'status': '201' });
+      res.status(201).json(data)
+    }
+  })
+})
+
 
 // ---------- ค้าหา queue "ที่นัดหมายไว้" จากวันเดือนปีที่กำหนด
 app.get('/queue/appointment', (req, res) => {
@@ -837,7 +850,7 @@ app.post('/room_usage', verifyToken, (req, res) => {
       let timezone = 7
       let date = new Date();
       date.setHours(date.getHours() + timezone);
-      console.log('timezone= '+timezone+' date= '+ date)
+      console.log('timezone= ' + timezone + ' date= ' + date)
       let room_usage = new Room_usage({
         _id: new mongoose.Types.ObjectId(),
 
@@ -928,7 +941,7 @@ app.get('/customer', (req, res) => {
   }
 });
 
-app.put('/queue/active', verifyToken, (req,res) => {
+app.put('/queue/active', verifyToken, (req, res) => {
   Queue.findByIdAndUpdate(req.body.id, { status: "active" }, { new: true }, (err, data) => {
     if (err) {
       res.set({ 'status': '400' });
@@ -941,7 +954,7 @@ app.put('/queue/active', verifyToken, (req,res) => {
   }).populate('room_usage');
 })
 
-app.put('/queue/awaitingpayment', verifyToken, (req,res) => {
+app.put('/queue/awaitingpayment', verifyToken, (req, res) => {
   Queue.findByIdAndUpdate(req.body.id, { status: "awaitingpayment" }, { new: true }, (err, data) => {
     if (err) {
       res.set({ 'status': '400' });
