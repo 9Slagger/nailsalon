@@ -378,19 +378,21 @@ app.put('/queue/status', verifyToken, (req, res) => {
   })
 })
 
+// ---------- บันทึกใบเสร็จ
 app.put('/queue/bill', verifyToken, (req, res) => {
-  // Queue.findByIdAndUpdate(req.body.id, { price: req.body.price, treatment_history: req.body.treatment_history }, { new: true }, (err, data) => {
-  Queue.findByIdAndUpdate("5bcb601fbf79050015205900", { price: 1400, treatment_history: "ขูดหินปูน" }, { new: true }).exec(function (err, data) {
+  Queue.findByIdAndUpdate(req.body.id, { price: req.body.price, treatment_history: req.body.treatment_history, status: "success" }, { new: true }).exec(function (err, data) {
     if (err) {
       res.set({ 'status': '400' });
       res.status(400).json(err)
+      console.log(err)
     }
     else {
       res.set({ 'status': '201' });
       res.status(201).json(data)
+      console.log(data)
     }
   })
-})
+});
 
 
 // ---------- ค้าหา queue "ที่นัดหมายไว้" จากวันเดือนปีที่กำหนด
@@ -967,15 +969,5 @@ app.put('/queue/awaitingpayment', verifyToken, (req, res) => {
     }
   }).populate('room_usage');
 })
-
-
-app.put('/test', verifyToken, (req, res) => {
-  makedata = {
-    a: "aaaa",
-    b: "bbbb"
-  }
-  res.set({ 'status': '200' });
-  res.status(200).json(makedata)
-});
 
 module.exports = app;

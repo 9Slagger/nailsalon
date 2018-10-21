@@ -20,7 +20,7 @@ var queueSchema = Schema({
     status: String,
 
     price: Number,
-    treatment_history: String
+    treatment_history: String,
 });
 
 var Queue = mongoose.model('Queue', queueSchema);
