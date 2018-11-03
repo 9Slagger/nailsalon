@@ -63,7 +63,8 @@ app.post('/employee/login', (req, res) => {
 
         const finalResult = {
           result: "Employee Login success",
-          token: token
+          token: token,
+          username: _username
         };
         res.set({ 'status': '200' });
         res.status(200).json(finalResult);
