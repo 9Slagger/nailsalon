@@ -30,7 +30,6 @@ app.post('/employee/register', (req, res) => {
   });
   employee.save(function (err, data) {
     if (err) {
-      res.set({ 'status': '400' });
       res.status(400).json(result_failed);
     }
     else {
@@ -38,7 +37,6 @@ app.post('/employee/register', (req, res) => {
         result: "success",
         data: " "
       };
-      res.set({ 'status': '201' });
       res.status(201).json({ result: "success " + data.username })
     }
   });
@@ -66,14 +64,12 @@ app.post('/employee/login', (req, res) => {
           token: token,
           username: _username
         };
-        res.set({ 'status': '200' });
         res.status(200).json(finalResult);
       } else {
         const finalResult = {
           result: "failed",
           data: " "
         };
-        res.set({ 'status': '401' });
         res.status(401).json(finalResult);
       }
     }
@@ -101,15 +97,13 @@ app.post('/customer/register', verifyToken, (req, res) => {
   });
   customer.save(function (err, data) {
     if (err) {
-      res.set({ 'status': '400' });
-      res.json(result_failed);
+      res.status(400).json(result_failed);
     }
     else {
       const finalResult = {
         result: "success",
         data: " "
       };
-      res.set({ 'status': '201' });
       res.status(201).json({ result: "success " + data.username })
     }
   });
@@ -136,14 +130,12 @@ app.post('/customer/login', (req, res) => {
           result: "Customer Login success",
           token: token
         };
-        res.set({ 'status': '200' });
         res.status(200).json(finalResult);
       } else {
         const finalResult = {
           result: "failed",
           data: " "
         };
-        res.set({ 'status': '401' });
         res.status(401).json(finalResult);
       }
     }
@@ -168,15 +160,13 @@ app.post('/doctor/register', (req, res) => {
   });
   doctor.save(function (err, data) {
     if (err) {
-      res.set({ 'status': '400' });
-      res.json(result_failed);
+      res.status(400).json(result_failed);
     }
     else {
       const finalResult = {
         result: "success",
         data: " "
       };
-      res.set({ 'status': '201' });
       res.status(201).json({ result: "success " + data.username })
     }
   });
@@ -202,14 +192,12 @@ app.post('/doctor/login', (req, res) => {
           result: "Doctor Login success",
           token: token
         };
-        res.set({ 'status': '200' });
         res.status(200).json(finalResult);
       } else {
         const finalResult = {
           result: "failed",
           data: " "
         };
-        res.set({ 'status': '401' });
         res.status(401).json(finalResult);
       }
     }
@@ -251,22 +239,18 @@ app.post('/queue', verifyToken, (req, res) => {
           })
           queue.save({ new: true }, function (err, data) {
             if (err) {
-              res.set({ 'status': '404' });
               res.status(404).json(err)
             }
             else {
-              res.set({ 'status': '201' });
               res.status(201).json(data)
             }
           });
         }
         else {
-          res.set({ 'status': '404' });
           res.status(404).json("Not Found Doctor")
         }
       }
       else {
-        res.set({ 'status': '404' });
         res.status(404).json("Not Found Customer")
       }
     }
@@ -326,7 +310,6 @@ app.put('/queue/booking', verifyToken, (req, res) => {
       findQueue = await findQueue(req.body.id);  //เก็บข้อมูลคิวที่กำลังรับหมายเลขคิว
       console.log(findQueue)
       if (findQueue == null) {
-        res.set({ 'status': '404' });
         res.status(404).json("Not Found Queue")
       }
       findRoom_usage = await findRoom_usage(findQueue.doctor, midnight_date); // เก็บข้อมูลของห้องของหมอที่คนไข้ปัจจุบันนัดไว้
@@ -338,27 +321,22 @@ app.put('/queue/booking', verifyToken, (req, res) => {
           if (findRoom_usage != null && findRoom_usage.status == 'active') {
             Queue.findByIdAndUpdate(req.body.id, { room_usage: findRoom_usage._id, status: "booking_queue", queue_order: QueueBefore + 1, priority: priority, queue_date: dateNow }, { new: true }, (err, data) => {
               if (err) {
-                res.set({ 'status': '400' });
                 res.status(400).json(err)
               }
               else {
-                res.set({ 'status': '201' });
                 res.status(201).json(data)
               }
             }).populate('room_usage');
           }
           else {
-            res.set({ 'status': '400' });
             res.status(400).json("The doctor is not in the room or Do not find the doctor's room")
           }
         }
         else {
-          res.set({ 'status': '400' });
           res.status(400).json("Do not queue repeat")
         }
       }
       else {
-        res.set({ 'status': '400' });
         res.status(400).json("date_now not match appointment_date")
       }
     }
@@ -374,11 +352,9 @@ app.put('/queue/booking', verifyToken, (req, res) => {
 app.put('/queue/status', verifyToken, (req, res) => {
   Queue.findByIdAndUpdate(req.body.queue, { status: "active" }, { new: true }).exec(function (err, data) {
     if (err) {
-      res.set({ 'status': '400' });
       res.status(400).json(err)
     }
     else {
-      res.set({ 'status': '201' });
       res.status(201).json(data)
     }
   })
@@ -388,12 +364,10 @@ app.put('/queue/status', verifyToken, (req, res) => {
 app.put('/queue/bill', verifyToken, (req, res) => {
   Queue.findByIdAndUpdate(req.body.id, { price: req.body.price, treatment_history: req.body.treatment_history, status: "success" }, { new: true }).exec(function (err, data) {
     if (err) {
-      res.set({ 'status': '400' });
       res.status(400).json(err)
       console.log(err)
     }
     else {
-      res.set({ 'status': '201' });
       res.status(201).json(data)
       console.log(data)
     }
@@ -415,11 +389,9 @@ app.get('/queue/appointment', (req, res) => {
   nextdate = new Date(year, month, nextday, 0, 0, 0);
   Queue.find({ appointment_date: { $gte: midnight_date, $lt: nextdate } }).exec(function (err, data) {
     if (err) {
-      res.set({ 'status': '404' });
       res.status(404).json("Not Found Queue")
     }
     else {
-      res.set({ 'status': '200' });
       res.status(200).json(data)
     }
   });
@@ -438,11 +410,9 @@ app.get('/queue/awaitingpayment', (req, res) => {
   nextdate = new Date(year, month, nextday, 0, 0, 0);
   Queue.find({ status: "awaitingpayment", queue_date: { $gte: midnight_date, $lt: nextdate } }).populate('room_usage').populate('customer').populate('doctor').exec(function (err, data) {
     if (err) {
-      res.set({ 'status': '404' });
       res.status(404).json("Not Found Queue")
     }
     else {
-      res.set({ 'status': '200' });
       res.status(200).json(data)
     }
   });
@@ -462,11 +432,9 @@ app.get('/queue/active', (req, res) => {
   nextdate = new Date(year, month, nextday, 0, 0, 0);
   Queue.find({ status: "active", queue_date: { $gte: midnight_date, $lt: nextdate } }).populate('room_usage').populate('customer').populate('doctor').exec(function (err, data) {
     if (err) {
-      res.set({ 'status': '404' });
       res.status(404).json("Not Found Queue")
     }
     else {
-      res.set({ 'status': '200' });
       res.status(200).json(data)
     }
   });
@@ -486,11 +454,9 @@ app.get('/queue/booking', (req, res) => {
   nextdate = new Date(year, month, nextday, 0, 0, 0);
   Queue.find({ status: "booking_queue", queue_date: { $gte: midnight_date, $lt: nextdate } }).populate('room_usage').populate('customer').populate('doctor').exec(function (err, data) {
     if (err) {
-      res.set({ 'status': '404' });
       res.status(404).json("Not Found Queue")
     }
     else {
-      res.set({ 'status': '200' });
       res.status(200).json(data)
     }
   });
@@ -501,11 +467,9 @@ app.get('/queue', (req, res) => {
   if (req.query.id) {
     Queue.find(req.query.id).exec(function (err, data) {
       if (err) {
-        res.set({ 'status': '404' });
         res.status(404).json("Not Found Queue")
       }
       else {
-        res.set({ 'status': '200' });
         res.status(200).json(data)
       }
     });
@@ -513,11 +477,9 @@ app.get('/queue', (req, res) => {
   else if (req.query.customer_id && req.query.status) {
     Queue.find({ customer: req.query.customer_id, status: req.query.status }).populate('customer').populate('doctor').exec(function (err, data) {
       if (err) {
-        res.set({ 'status': '404' });
         res.status(404).json("Not Found Queue")
       }
       else {
-        res.set({ 'status': '200' });
         res.status(200).json(data)
       }
     });
@@ -528,18 +490,15 @@ app.get('/queue', (req, res) => {
       console.log("point 2")
       if (err_customer) {
         console.log("point 3")
-        res.set({ 'status': '404' });
         res.status(404).json("Not Found Customer")
       }
       else if (data_customer) {
         console.log("point 4")
         Queue.find({ customer: data_customer._id, status: req.query.status }).populate('customer').populate('doctor').exec(function (err, data) {
           if (err) {
-            res.set({ 'status': '404' });
             res.status(404).json("Not Found Queue")
           }
           else {
-            res.set({ 'status': '200' });
             res.status(200).json(data)
           }
         });
@@ -549,11 +508,9 @@ app.get('/queue', (req, res) => {
   else if (req.query.customer_id) {
     Queue.find({ customer: req.query.customer_id }).exec(function (err, data) {
       if (err) {
-        res.set({ 'status': '404' });
         res.status(404).json("Not Found Queue")
       }
       else {
-        res.set({ 'status': '200' });
         res.status(200).json(data)
       }
     });
@@ -561,11 +518,9 @@ app.get('/queue', (req, res) => {
   else if (req.query.employee_id) {
     Queue.find({ employee: req.query.employee_id }).exec(function (err, data) {
       if (err) {
-        res.set({ 'status': '404' });
         res.status(404).json("Not Found Queue")
       }
       else {
-        res.set({ 'status': '200' });
         res.status(200).json(data)
       }
     });
@@ -573,11 +528,9 @@ app.get('/queue', (req, res) => {
   else if (req.query.doctor_id) {
     Queue.find({ doctor: req.query.doctor_id }).exec(function (err, data) {
       if (err) {
-        res.set({ 'status': '404' });
         res.status(404).json("Not Found Queue")
       }
       else {
-        res.set({ 'status': '200' });
         res.status(200).json(data)
       }
     });
@@ -585,11 +538,9 @@ app.get('/queue', (req, res) => {
   else if (req.query.title) {
     Queue.find({ title: req.query.title }).exec(function (err, data) {
       if (err) {
-        res.set({ 'status': '404' });
         res.status(404).json("Not Found Queue")
       }
       else {
-        res.set({ 'status': '200' });
         res.status(200).json(data)
       }
     });
@@ -597,11 +548,9 @@ app.get('/queue', (req, res) => {
   else if (req.query.appointment_date) {
     Queue.find({ appointment_date: req.query.appointment_date }).exec(function (err, data) {
       if (err) {
-        res.set({ 'status': '404' });
         res.status(404).json("Not Found Queue")
       }
       else {
-        res.set({ 'status': '200' });
         res.status(200).json(data)
       }
     });
@@ -609,11 +558,9 @@ app.get('/queue', (req, res) => {
   else if (req.query.status) {
     Queue.find({ status: req.query.status }).exec(function (err, data) {
       if (err) {
-        res.set({ 'status': '404' });
         res.status(404).json("Not Found Queue")
       }
       else {
-        res.set({ 'status': '200' });
         res.status(200).json(data)
       }
     });
@@ -621,11 +568,9 @@ app.get('/queue', (req, res) => {
   else if (req.query.priority) {
     Queue.find({ priority: req.query.priority }).exec(function (err, data) {
       if (err) {
-        res.set({ 'status': '404' });
         res.status(404).json("Not Found Queue")
       }
       else {
-        res.set({ 'status': '200' });
         res.status(200).json(data)
       }
     });
@@ -633,11 +578,9 @@ app.get('/queue', (req, res) => {
   else if (req.query.queue_date) {
     Queue.find({ queue_date: req.query.queue_date }).exec(function (err, data) {
       if (err) {
-        res.set({ 'status': '404' });
         res.status(404).json("Not Found Queue")
       }
       else {
-        res.set({ 'status': '200' });
         res.status(200).json(data)
       }
     });
@@ -645,11 +588,9 @@ app.get('/queue', (req, res) => {
   else if (req.query.queue_order) {
     Queue.find({ queue_order: req.query.queue_order }).exec(function (err, data) {
       if (err) {
-        res.set({ 'status': '404' });
         res.status(404).json("Not Found Queue")
       }
       else {
-        res.set({ 'status': '200' });
         res.status(200).json(data)
       }
     });
@@ -657,11 +598,9 @@ app.get('/queue', (req, res) => {
   else {
     Queue.find().exec(function (err, data) {
       if (err) {
-        res.set({ 'status': '404' });
         res.status(404).json("Not Found Queue")
       }
       else {
-        res.set({ 'status': '200' });
         res.status(200).json(data)
       }
     });
@@ -706,11 +645,9 @@ app.post('/room', verifyToken, (req, res) => {
   })
   room.save({ new: true }, function (err, data) {
     if (err) {
-      res.set({ 'status': '400' });
       res.status(400).json(err)
     }
     else {
-      res.set({ 'status': '201' });
       res.status(201).json(data)
     }
   });
@@ -720,11 +657,9 @@ app.post('/room', verifyToken, (req, res) => {
 app.get('/room', (req, res) => {
   Room.find().exec(function (err, data) {
     if (err) {
-      res.set({ 'status': '400' });
       res.status(400).json(err)
     }
     else {
-      res.set({ 'status': '200' });
       res.status(200).json(data)
     }
   })
@@ -734,11 +669,9 @@ app.get('/room', (req, res) => {
 app.get('/doctor', verifyToken, (req, res) => {
   Doctor.find().exec(function (err, data) {
     if (err) {
-      res.set({ 'status': '404' });
       res.status(404).json(err)
     }
     else {
-      res.set({ 'status': '200' });
       res.status(200).json(data)
     }
   });
@@ -748,11 +681,9 @@ app.get('/doctor', verifyToken, (req, res) => {
 app.put('/room', verifyToken, (req, res) => {
   Room.findOneAndUpdate({ room_name: req.query.room_name }, { room_name: req.body.room_name }, { new: true }, (err, data) => {
     if (data) {
-      res.set({ 'status': '204' });
       res.status(204).json()
     }
     else {
-      res.set({ 'status': '400' });
       res.status(400).json()
     }
   });
@@ -762,11 +693,9 @@ app.put('/room', verifyToken, (req, res) => {
 app.delete('/room', verifyToken, (req, res) => {
   Room.findOneAndRemove({ 'room_name': req.query.room_name }, (err, data) => {
     if (data) {
-      res.set({ 'status': '204' });
       res.status(204).json()
     }
     else {
-      res.set({ 'status': '400' });
       res.status(400).json()
     }
   });
@@ -779,7 +708,6 @@ app.post('/room_usage', verifyToken, (req, res) => {
     console.log("point 2")
     if (err) {
       console.log("point 3")
-      res.set({ 'status': '404' });
       res.status(404).json("Not Found Room")
     }
     else {
@@ -804,12 +732,10 @@ app.post('/room_usage', verifyToken, (req, res) => {
         console.log("point 5")
         if (err) {
           console.log("point 6")
-          res.set({ 'status': '404' });
           res.status(400).json(err)
         }
         else {
           console.log("point 7")
-          res.set({ 'status': '201' });
           res.status(201).json(data)
         }
       });
@@ -828,11 +754,9 @@ app.get('/room_usage', verifyToken, (req, res) => {
   nextdate = new Date(year, month, nextday, 0, 0, 0);
   Room_usage.find({ usage_date: { $gte: midnight_date, $lt: nextdate } }).exec(function (err, data) {
     if (err) {
-      res.set({ 'status': '404' });
       res.status(400).json(err)
     }
     else {
-      res.set({ 'status': '200' });
       res.status(200).json(data)
     }
   })
@@ -841,11 +765,9 @@ app.get('/room_usage', verifyToken, (req, res) => {
 app.put('/room_usage', verifyToken, (req, res) => {
   Room_usage.findOneAndUpdate({ _id: req.body.id }, { status: req.body.status }, { new: true }, (err, data) => {
     if (data) {
-      res.set({ 'status': '201' });
       res.status(201).json(data)
     }
     else {
-      res.set({ 'status': '400' });
       res.status(400).json(err)
     }
   });
@@ -855,11 +777,9 @@ app.get('/customer', (req, res) => {
   if (req.query.personalid) {
     Customer.findOne({ personalid: req.query.personalid }, (err, data) => {
       if (data) {
-        res.set({ 'status': '200' });
         res.status(200).json(data)
       }
       else {
-        res.set({ 'status': '404' });
         res.status(404).json("Not Found Customer")
       }
     })
@@ -867,11 +787,9 @@ app.get('/customer', (req, res) => {
   else if (req.query.phone) {
     Customer.findOne({ phone: req.query.phone }).exec(function (err, data) {
       if (data) {
-        res.set({ 'status': '200' });
         res.status(200).json(data)
       }
       else {
-        res.set({ 'status': '404' });
         res.status(404).json("Not Found Customer")
       }
     });
@@ -881,11 +799,9 @@ app.get('/customer', (req, res) => {
 app.put('/queue/active', verifyToken, (req, res) => {
   Queue.findByIdAndUpdate(req.body.id, { status: "active" }, { new: true }, (err, data) => {
     if (err) {
-      res.set({ 'status': '400' });
       res.status(400).json(err)
     }
     else {
-      res.set({ 'status': '201' });
       res.status(201).json(data)
     }
   }).populate('room_usage');
@@ -894,11 +810,9 @@ app.put('/queue/active', verifyToken, (req, res) => {
 app.put('/queue/awaitingpayment', verifyToken, (req, res) => {
   Queue.findByIdAndUpdate(req.body.id, { status: "awaitingpayment" }, { new: true }, (err, data) => {
     if (err) {
-      res.set({ 'status': '400' });
       res.status(400).json(err)
     }
     else {
-      res.set({ 'status': '201' });
       res.status(201).json(data)
     }
   }).populate('room_usage');
