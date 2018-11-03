@@ -490,7 +490,7 @@ app.get('/queue', (req, res) => {
       console.log("point 2")
       if (data_customer == null) {
         console.log("point 3")
-        res.status(404).json("Not Found Customer")
+        res.status(400).json("Not Found Customer")
       }
       else if (data_customer) {
         console.log("point 4")
