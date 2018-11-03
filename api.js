@@ -788,7 +788,7 @@ app.post('/room', verifyToken, (req, res) => {
 });
 
 // ---------- get room
-app.get('/room', verifyToken, (req, res) => {
+app.get('/room', (req, res) => {
   Room.find().exec(function (err, data) {
     if (err) {
       res.set({ 'status': '400' });
