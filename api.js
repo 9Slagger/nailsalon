@@ -713,7 +713,7 @@ app.post('/room_usage', verifyToken, (req, res) => {
       console.log("point 3")
       res.status(404).json("Not Found Room")
     }
-    else if(req.body.doctor === null || req.body.usage_date === null) {
+    else if(req.body.doctor === undefined || req.body.usage_date === undefined) {
       res.status(400).json("Bad Request")
     }
     else {
