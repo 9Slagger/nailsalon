@@ -13,12 +13,6 @@ const Room_usage = require('./model/room_usageModel')
 
 app.use(cors())
 
-//---------------------------------------------
-
-app.get('/products', function (req, res) {
-  res.json({msg: 'This is CORS-enabled for all origins!'})
-})
-
 // --------------------------------------------
 
 const result_failed = {
