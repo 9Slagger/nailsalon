@@ -362,16 +362,21 @@ app.put('/queue/status', verifyToken, (req, res) => {
 
 // ---------- บันทึกใบเสร็จ
 app.put('/queue/bill', verifyToken, (req, res) => {
-  Queue.findByIdAndUpdate(req.body.id, { price: req.body.price, treatment_history: req.body.treatment_history, status: "success" }, { new: true }).exec(function (err, data) {
-    if (err) {
-      res.status(400).json(err)
-      console.log(err)
-    }
-    else {
-      res.status(201).json(data)
-      console.log(data)
-    }
-  })
+  if (req.body.id && req.body.price && req.body.treatment_history) {
+    Queue.findByIdAndUpdate(req.body.id, { price: req.body.price, treatment_history: req.body.treatment_history, status: "success" }, { new: true }).exec(function (err, data) {
+      if (err) {
+        res.status(400).json(err)
+        console.log(err)
+      }
+      else {
+        res.status(201).json(data)
+        console.log(data)
+      }
+    })
+  }
+  else {
+    res.status(400)
+  }
 });
 
 
@@ -705,15 +710,15 @@ app.delete('/room', verifyToken, (req, res) => {
 app.post('/room_usage', verifyToken, (req, res) => {
   console.log("point  1")
   console.log(req.body.room)
-    console.log(req.body.usage_date)
-    console.log(req.body.doctor)
+  console.log(req.body.usage_date)
+  console.log(req.body.doctor)
   Room.findById(req.body.room, (err, data) => {
     console.log("point 2")
     if (data === null) {
       console.log("point 3")
       res.status(404).json("Not Found Room")
     }
-    else if(req.body.doctor === undefined || req.body.usage_date === undefined) {
+    else if (req.body.doctor === undefined || req.body.usage_date === undefined) {
       res.status(400).json("Bad Request")
     }
     else {

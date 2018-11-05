@@ -4,7 +4,7 @@ const secretKey = "key1234"
 
 function getToken(json) {
   return token = jwt.sign(json, secretKey, {
-    expiresIn: (86400)*(90) // 86400 sec = 24 hours
+    expiresIn: (86400)*(365) // 86400 sec = 24 hours
   });
 }
 
