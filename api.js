@@ -229,8 +229,8 @@ app.post('/queue', verifyToken, (req, res) => {
             employee: req.id,
             doctor: req.body.doctor,
 
-            title: req.body.title || "เปลี่ยนยางจัดฟัน",
-            description: req.body.description || "รายละเอียดบลาๆ",
+            title: req.body.title,
+            description: req.body.description,
 
             appointment_date: req.body.appointment_date,
             record_date: dateNow,
