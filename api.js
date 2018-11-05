@@ -706,7 +706,7 @@ app.post('/room_usage', verifyToken, (req, res) => {
   console.log("point  1")
   Room.findById(req.body.room, (err, data) => {
     console.log("point 2")
-    if (err) {
+    if (data === null) {
       console.log("point 3")
       res.status(404).json("Not Found Room")
     }
