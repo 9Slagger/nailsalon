@@ -15,7 +15,7 @@ app.use(cors())
 
 //---------------------------------------------
 
-app.get('/products', function (req, res, next) {
+app.get('/products', function (req, res) {
   res.json({msg: 'This is CORS-enabled for all origins!'})
 })
 
