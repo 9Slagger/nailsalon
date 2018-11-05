@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express.Router()
-var bcrypt = require('bcryptjs')
+const cors = require('cors');
+const bcrypt = require('bcryptjs')
 const { getToken, verifyToken } = require('./jwtHandler')
 const mongoose = require('./db_config')
 const Customer = require('./model/customersModel')
@@ -43,7 +44,8 @@ app.post('/employee/register', (req, res) => {
 });
 
 // ---------- employee login
-app.post('/employee/login', (req, res) => {
+
+app.use(cors('/employee/login', (req, res) => {
   Employee.find({ 'username': req.body.username }, (err, result) => {
     // console.log(result)
     if (err) {
@@ -74,7 +76,12 @@ app.post('/employee/login', (req, res) => {
       }
     }
   });
-});
+}));
+
+
+// app.post('/employee/login', (req, res) => {
+  
+// });
 
 // ---------- customer registor
 app.post('/customer/register', verifyToken, (req, res) => {
