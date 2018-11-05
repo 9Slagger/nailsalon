@@ -704,6 +704,9 @@ app.delete('/room', verifyToken, (req, res) => {
 // ---------- post room_usage
 app.post('/room_usage', verifyToken, (req, res) => {
   console.log("point  1")
+  console.log(req.body.room)
+    console.log(req.body.usage_date)
+    console.log(req.body.doctor)
   Room.findById(req.body.room, (err, data) => {
     console.log("point 2")
     if (data === null) {
