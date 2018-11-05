@@ -1,6 +1,6 @@
 const express = require('express')
+const cors = require('cors')
 const app = express.Router()
-const cors = require('cors');
 const bcrypt = require('bcryptjs')
 const { getToken, verifyToken } = require('./jwtHandler')
 const mongoose = require('./db_config')
@@ -10,6 +10,14 @@ const Doctor = require('./model/doctorsModel')
 const Queue = require('./model/queuesModel')
 const Room = require('./model/roomModel')
 const Room_usage = require('./model/room_usageModel')
+
+app.use(cors())
+
+//---------------------------------------------
+
+app.get('/products', function (req, res, next) {
+  res.json({msg: 'This is CORS-enabled for all origins!'})
+})
 
 // --------------------------------------------
 
@@ -44,8 +52,7 @@ app.post('/employee/register', (req, res) => {
 });
 
 // ---------- employee login
-
-app.use(cors('/employee/login', (req, res) => {
+app.post('/employee/login', (req, res) => {
   Employee.find({ 'username': req.body.username }, (err, result) => {
     // console.log(result)
     if (err) {
@@ -76,12 +83,7 @@ app.use(cors('/employee/login', (req, res) => {
       }
     }
   });
-}));
-
-
-// app.post('/employee/login', (req, res) => {
-  
-// });
+});
 
 // ---------- customer registor
 app.post('/customer/register', verifyToken, (req, res) => {
