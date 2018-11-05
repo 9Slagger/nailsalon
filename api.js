@@ -703,7 +703,7 @@ app.delete('/room', verifyToken, (req, res) => {
 
 // ---------- post room_usage
 app.post('/room_usage', verifyToken, (req, res) => {
-  console.log("point 1")
+  console.log("point  1")
   Room.findById(req.body.room, (err, data) => {
     console.log("point 2")
     if (err) {
