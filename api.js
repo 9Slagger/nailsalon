@@ -862,8 +862,8 @@ app.get('/list', verifyToken, (req, res) => {
   })
 })
 
-app.delete('list', verifyToken, (req, res) => {
-  List.findOneAndDelete({ '_id': req.query.id }, (err, data) => {
+app.delete('/list', verifyToken, (req, res) => {
+  List.findOneAndDelete(req.body.id, (err, data) => {
     if(err) {
       res.status(404).json({error: err, message: "Not Found List"})
     }
