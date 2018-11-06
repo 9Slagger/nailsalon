@@ -54,7 +54,7 @@ app.post('/employee/login', (req, res) => {
     } else {
       if (result.length > 0) {
         const passwordIsValid = bcrypt.compareSync(req.body.password, result[0].password);
-        if (!passwordIsValid) return res.json(result_failed);
+        if (!passwordIsValid) return res.status(401).json(result_failed);
 
         var _username = result[0].username;
         var _id = result[0].id;
@@ -67,12 +67,7 @@ app.post('/employee/login', (req, res) => {
           token: token,
           username: _username
         };
-        if (passwordIsValid) {
-          res.status(200).json(finalResult);
-        }
-        else {
-          res.status(401).json(finalResult);
-        }
+        res.status(200).json(finalResult);
       } else {
         const finalResult = {
           result: "failed",
@@ -125,7 +120,7 @@ app.post('/customer/login', (req, res) => {
     } else {
       if (result.length > 0) {
         const passwordIsValid = bcrypt.compareSync(req.body.password, result[0].password);
-        if (!passwordIsValid) return res.json(result_failed);
+        if (!passwordIsValid) return res.status(401).json(result_failed);
 
         var _username = result[0].username;
         var _id = result[0].id;
@@ -138,12 +133,7 @@ app.post('/customer/login', (req, res) => {
           result: "Customer Login success",
           token: token
         };
-        if (passwordIsValid) {
-          res.status(200).json(finalResult);
-        }
-        else {
-          res.status(401).json(finalResult);
-        }
+        res.status(200).json(finalResult);
       } else {
         const finalResult = {
           result: "failed",
@@ -193,7 +183,7 @@ app.post('/doctor/login', (req, res) => {
     } else {
       if (result.length > 0) {
         const passwordIsValid = bcrypt.compareSync(req.body.password, result[0].password);
-        if (!passwordIsValid) return res.json(result_failed);
+        if (!passwordIsValid) return res.status(401).json(result_failed);
 
         var _username = result[0].username;
         var _id = result[0].id;
@@ -205,12 +195,7 @@ app.post('/doctor/login', (req, res) => {
           result: "Doctor Login success",
           token: token
         };
-        if (passwordIsValid) {
-          res.status(200).json(finalResult);
-        }
-        else {
-          res.status(401).json(finalResult);
-        }
+        res.status(200).json(finalResult);
       } else {
         const finalResult = {
           result: "failed",
@@ -849,7 +834,7 @@ app.put('/queue/awaitingpayment', verifyToken, (req, res) => {
 
 //----------------------------------------------------
 app.get('/checkserver', (req, res) => {
-  res.status(200).json({ status: "ok" })
+  res.status(200).json({status: "ok"})
 });
 
 module.exports = app;
