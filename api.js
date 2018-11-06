@@ -851,6 +851,17 @@ app.post('/list', verifyToken, (req, res) => {
   });
 })
 
+app.delete('list', verifyToken, (req, res) => {
+  List.findByIdAndDelete(req.body.id, (err, data) => {
+    if(err) {
+      res.status(404).json({error: err, message: "Not Found List"})
+    }
+    else {
+      res.status(204).json(data)
+    }
+  })
+})
+
 //----------------------------------------------------
 app.get('/checkserver', (req, res) => {
   res.status(200).json({ status: "ok" })
