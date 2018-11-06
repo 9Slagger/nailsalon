@@ -10,6 +10,7 @@ const Doctor = require('./model/doctorsModel')
 const Queue = require('./model/queuesModel')
 const Room = require('./model/roomModel')
 const Room_usage = require('./model/room_usageModel')
+const List = require('./model/listModel')
 
 app.use(cors())
 
@@ -833,8 +834,26 @@ app.put('/queue/awaitingpayment', verifyToken, (req, res) => {
 })
 
 //----------------------------------------------------
+
+app.post('/list', verifyToken, (req, res) => {
+  let list = new List({
+    _id: new mongoose.Types.ObjectId(),
+    title: req.body.title,
+    price: req.body.price
+  })
+  list.save({ new: true }, function (err, data) {
+    if (err) {
+      res.status(400).json(err)
+    }
+    else {
+      res.status(201).json(data)
+    }
+  });
+})
+
+//----------------------------------------------------
 app.get('/checkserver', (req, res) => {
-  res.status(200).json({status: "ok"})
+  res.status(200).json({ status: "ok" })
 });
 
 module.exports = app;
