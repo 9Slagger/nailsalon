@@ -60,15 +60,16 @@ app.post('/employee/login', (req, res) => {
         var _username = result[0].username;
         var _id = result[0].id;
         var _type = "employee";
-
-        var token = getToken({ id: _id, username: _username, type: _type })
+        var token = ''
+        token = getToken({ id: _id, username: _username, type: _type })
 
         const finalResult = {
           result: "Employee Login success",
           token: token,
           username: _username
         };
-        res.status(200).json(finalResult);
+        if(getToken) res.status(200).json(finalResult);
+        else res.status(401).json(finalResult)
       } else {
         const finalResult = {
           result: "failed",
@@ -118,7 +119,8 @@ app.post('/customer/login', (req, res) => {
   Customer.find({ 'username': req.body.username }, (err, result) => {
     if (err) {
       res.json(result_failed);
-    } else {
+    }
+    else {
       if (result.length > 0) {
         const passwordIsValid = bcrypt.compareSync(req.body.password, result[0].password);
         if (!passwordIsValid) return res.status(401).json(result_failed);
@@ -368,7 +370,7 @@ app.put('/queue/status', verifyToken, (req, res) => {
 // ---------- บันทึกใบเสร็จ
 app.put('/queue/bill', verifyToken, (req, res) => {
   if (req.body.id && req.body.price && req.body.treatment_history) {
-    Queue.findByIdAndUpdate(req.body.id, { list: req.body.list ,price: req.body.price, treatment_history: req.body.treatment_history, status: "success" }, { new: true }).exec(function (err, data) {
+    Queue.findByIdAndUpdate(req.body.id, { list: req.body.list, price: req.body.price, treatment_history: req.body.treatment_history, status: "success" }, { new: true }).exec(function (err, data) {
       if (err) {
         res.status(400).json(err)
         console.log(err)
