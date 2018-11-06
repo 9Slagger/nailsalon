@@ -235,6 +235,7 @@ app.post('/queue', verifyToken, (req, res) => {
 
             title: req.body.title,
             description: req.body.description,
+            list: req.body.list,
 
             appointment_date: req.body.appointment_date,
             record_date: dateNow,
@@ -853,8 +854,8 @@ app.post('/list', verifyToken, (req, res) => {
 
 app.get('/list', verifyToken, (req, res) => {
   List.find().exec(function (err, data) {
-    if(err) {
-      res.status(404).json({message: "Not Found List"})
+    if (err) {
+      res.status(404).json({ message: "Not Found List" })
     }
     else {
       res.status(200).json(data)
@@ -864,8 +865,8 @@ app.get('/list', verifyToken, (req, res) => {
 
 app.delete('/list', verifyToken, (req, res) => {
   List.findOneAndDelete(req.body.id, (err, data) => {
-    if(err) {
-      res.status(404).json({error: err, message: "Not Found List"})
+    if (err) {
+      res.status(404).json({ error: err, message: "Not Found List" })
     }
     else {
       res.status(204).json()
