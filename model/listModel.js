@@ -6,9 +6,7 @@ var listSchema = Schema({
     title: {
         type: String, unique: true
     },
-    price: {
-        type: Number
-    }
+    price: Number
 });
 
 var List = mongoose.model('List', listSchema);
