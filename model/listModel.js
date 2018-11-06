@@ -7,7 +7,7 @@ var listSchema = Schema({
         type: String, unique: true
     },
     price: {
-        type: Number, unique: true
+        type: Number
     }
 });
 

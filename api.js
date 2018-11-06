@@ -835,7 +835,7 @@ app.put('/queue/awaitingpayment', verifyToken, (req, res) => {
 
 //----------------------------------------------------
 
-app.post('/list', verifyToken, (req, res) => {
+aplistp.post('/', verifyToken, (req, res) => {
   let list = new List({
     _id: new mongoose.Types.ObjectId(),
     title: req.body.title,
