@@ -832,4 +832,9 @@ app.put('/queue/awaitingpayment', verifyToken, (req, res) => {
   }).populate('room_usage');
 })
 
+//----------------------------------------------------
+app.get('/checkserver', verifyToken, (req, res) => {
+      res.status(200)
+});
+
 module.exports = app;
