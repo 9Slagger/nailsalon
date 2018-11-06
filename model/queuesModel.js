@@ -10,6 +10,12 @@ var queueSchema = Schema({
     title: String,//เปลี่ยนยางจัดฟัน
     description: String,//รายละเอียด
 
+    list: [
+        {
+            title: String,
+            price: Number
+        }
+    ],
     appointment_date: Date,//วันเวลาที่นัด
     record_date: Date,//วันเวลาที่บันทึกการนัด
 
