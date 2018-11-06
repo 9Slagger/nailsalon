@@ -48,39 +48,44 @@ app.post('/employee/register', (req, res) => {
 
 // ---------- employee login
 app.post('/employee/login', (req, res) => {
-  Employee.find({ 'username': req.body.username }, (err, result) => {
-    // console.log(result)
-    if (err) {
-      res.json(result_failed);
-    } else {
-      if (result.length > 0) {
-        const passwordIsValid = bcrypt.compareSync(req.body.password, result[0].password);
-        if (!passwordIsValid) {
-          return res.status(401).json(result_failed);
-        }
-        else {
-          var _username = result[0].username;
-          var _id = result[0].id;
-          var _type = "employee";
-  
-          var token = getToken({ id: _id, username: _username, type: _type })
-  
-          const finalResult = {
-            result: "Employee Login success",
-            token: token,
-            username: _username
-          };
-          res.status(200).json(finalResult);
-        }
+  if (req.body.username && req.body.password) {
+    Employee.find({ 'username': req.body.username }, (err, result) => {
+      // console.log(result)
+      if (err) {
+        res.json(result_failed);
       } else {
-        const finalResult = {
-          result: "failed",
-          data: " "
-        };
-        res.status(401).json(finalResult);
+        if (result.length > 0) {
+          const passwordIsValid = bcrypt.compareSync(req.body.password, result[0].password);
+          if (!passwordIsValid) {
+            return res.status(401).json(result_failed);
+          }
+          else {
+            var _username = result[0].username;
+            var _id = result[0].id;
+            var _type = "employee";
+
+            var token = getToken({ id: _id, username: _username, type: _type })
+
+            const finalResult = {
+              result: "Employee Login success",
+              token: token,
+              username: _username
+            };
+            res.status(200).json(finalResult);
+          }
+        } else {
+          const finalResult = {
+            result: "failed",
+            data: " "
+          };
+          res.status(401).json(finalResult);
+        }
       }
-    }
-  });
+    });
+  }
+  else {
+    rea.status(401).json(finalResult);
+  }
 });
 
 // ---------- customer registor
