@@ -406,7 +406,7 @@ app.get('/queue/appointment', (req, res) => {
   let timezone = 7
   midnight_date = new Date(year, month, day, 0, 0, 0);
   nextdate = new Date(year, month, nextday, 0, 0, 0);
-  Queue.find({ appointment_date: { $gte: midnight_date, $lt: nextdate } }).exec(function (err, data) {
+  Queue.find({ appointment_date: { $gte: midnight_date, $lt: nextdate } }).populate('room_usage').populate('customer').populate('doctor').exec(function (err, data) {
     if (err) {
       res.status(404).json("Not Found Queue")
     }
