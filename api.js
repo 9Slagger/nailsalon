@@ -67,7 +67,12 @@ app.post('/employee/login', (req, res) => {
           token: token,
           username: _username
         };
-        res.status(200).json(finalResult);
+        if (passwordIsValid) {
+          res.status(200).json(finalResult);
+        }
+        else {
+          res.status(401).json(finalResult);
+        }
       } else {
         const finalResult = {
           result: "failed",
@@ -133,7 +138,12 @@ app.post('/customer/login', (req, res) => {
           result: "Customer Login success",
           token: token
         };
-        res.status(200).json(finalResult);
+        if (passwordIsValid) {
+          res.status(200).json(finalResult);
+        }
+        else {
+          res.status(401).json(finalResult);
+        }
       } else {
         const finalResult = {
           result: "failed",
@@ -195,7 +205,12 @@ app.post('/doctor/login', (req, res) => {
           result: "Doctor Login success",
           token: token
         };
-        res.status(200).json(finalResult);
+        if (passwordIsValid) {
+          res.status(200).json(finalResult);
+        }
+        else {
+          res.status(401).json(finalResult);
+        }
       } else {
         const finalResult = {
           result: "failed",
@@ -834,7 +849,7 @@ app.put('/queue/awaitingpayment', verifyToken, (req, res) => {
 
 //----------------------------------------------------
 app.get('/checkserver', (req, res) => {
-  res.status(200).json({status: "ok"})
+  res.status(200).json({ status: "ok" })
 });
 
 module.exports = app;
