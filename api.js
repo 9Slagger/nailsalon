@@ -833,8 +833,8 @@ app.put('/queue/awaitingpayment', verifyToken, (req, res) => {
 })
 
 //----------------------------------------------------
-app.get('/checkserver', verifyToken, (req, res) => {
-      res.status(200)
+app.get('/checkserver', (req, res) => {
+  res.status(200)
 });
 
 module.exports = app;
