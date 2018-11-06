@@ -55,21 +55,23 @@ app.post('/employee/login', (req, res) => {
     } else {
       if (result.length > 0) {
         const passwordIsValid = bcrypt.compareSync(req.body.password, result[0].password);
-        if (!passwordIsValid) return res.status(401).json(result_failed);
-
-        var _username = result[0].username;
-        var _id = result[0].id;
-        var _type = "employee";
-        var token = ''
-        token = getToken({ id: _id, username: _username, type: _type })
-
-        const finalResult = {
-          result: "Employee Login success",
-          token: token,
-          username: _username
-        };
-        if(getToken) res.status(200).json(finalResult);
-        else res.status(401).json(finalResult)
+        if (!passwordIsValid) {
+          return res.status(401).json(result_failed);
+        }
+        else {
+          var _username = result[0].username;
+          var _id = result[0].id;
+          var _type = "employee";
+  
+          var token = getToken({ id: _id, username: _username, type: _type })
+  
+          const finalResult = {
+            result: "Employee Login success",
+            token: token,
+            username: _username
+          };
+          res.status(200).json(finalResult);
+        }
       } else {
         const finalResult = {
           result: "failed",
