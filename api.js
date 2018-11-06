@@ -834,7 +834,7 @@ app.put('/queue/awaitingpayment', verifyToken, (req, res) => {
 
 //----------------------------------------------------
 app.get('/checkserver', (req, res) => {
-  res.status(200)
+  res.status(200).json({status: "ok"})
 });
 
 module.exports = app;
