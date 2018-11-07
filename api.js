@@ -25,7 +25,7 @@ const result_failed = {
 // ---------- employee registor
 app.post('/employee/register', (req, res) => {
   Key.find().exec(function (err, key_data) {
-    if (!err && key_data && req.body.key === key_data) {
+    if (req.body.key == "115522") {
       var hashedPassword = bcrypt.hashSync(req.body.password, 8);
       req.body.password = hashedPassword;
 
