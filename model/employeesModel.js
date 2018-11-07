@@ -9,7 +9,12 @@ var employeeSchema = Schema({
         unique: true
     },
     password: String,
-    age: Number,
+    firstname: String,
+    lastname: String,
+    phone: String,
+    address: String,
+    birthday: Date,
+    record_date: Date,
     queues: [{ type: Schema.Types.ObjectId, ref: 'queues' }]
 });
 

@@ -11,6 +11,7 @@ const Queue = require('./model/queuesModel')
 const Room = require('./model/roomModel')
 const Room_usage = require('./model/room_usageModel')
 const List = require('./model/listModel')
+const Key = require('./model/keyModel')
 
 app.use(cors())
 
@@ -23,27 +24,41 @@ const result_failed = {
 
 // ---------- employee registor
 app.post('/employee/register', (req, res) => {
-  var hashedPassword = bcrypt.hashSync(req.body.password, 8);
-  req.body.password = hashedPassword;
+  Key.find().exec(function (err, key_data) {
+    if (!err && key_data && req.body.key === key_data) {
+      var hashedPassword = bcrypt.hashSync(req.body.password, 8);
+      req.body.password = hashedPassword;
 
-  var employee = new Employee({
-    _id: new mongoose.Types.ObjectId(),
-    username: req.body.username,
-    password: req.body.password,
-    age: req.body.age || 15
-  });
-  employee.save(function (err, data) {
-    if (err) {
-      res.status(400).json(result_failed);
+      var employee = new Employee({
+        _id: new mongoose.Types.ObjectId(),
+        username: req.body.username,
+        password: req.body.password,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        phone: req.body.phone,
+        address: req.body.address,
+        allergy_history: req.body.allergy_history,
+        birthday: req.body.birthday,
+        personalid: req.body.personalid,
+        record_date: new Date(),
+      });
+      employee.save(function (err, data) {
+        if (err) {
+          res.status(400).json(result_failed);
+        }
+        else {
+          const finalResult = {
+            result: "success",
+            data: " "
+          };
+          res.status(201).json({ result: "success " + data.username })
+        }
+      });
     }
     else {
-      const finalResult = {
-        result: "success",
-        data: " "
-      };
-      res.status(201).json({ result: "success " + data.username })
+      res.status(401).json({ result: "Wrong code" })
     }
-  });
+  })
 });
 
 // ---------- employee login
