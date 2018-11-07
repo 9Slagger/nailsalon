@@ -1,5 +1,9 @@
-Example use api by postman
+How to run Project
 
-Update api ตัวล่าสุด ก่อนใช้งานเสมอ โดยคลิกที่ link
+1.git clone https://github.com/9Slagger/server
 
-https://www.getpostman.com/collections/5081c139e648ad5a0f85
+2.cd server
+
+3.npm start "or" node server
+
+Example use api by postman click ling => https://www.getpostman.com/collections/5081c139e648ad5a0f85
