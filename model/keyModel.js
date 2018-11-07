@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 var keySchema = Schema({
     _id: Schema.Types.ObjectId,
-    firstname: String,
+    key: String,
 });
 
 var Key = mongoose.model('Key', keySchema);
