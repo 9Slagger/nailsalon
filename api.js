@@ -17,7 +17,14 @@ app.use(cors())
 
 // --------------------------------------------
 
-app.post('/employee/register2', (req, res) => {
+const result_failed = {
+  result: "failed",
+  data: ""
+};
+
+// ---------- employee registor
+
+app.post('/employee/register', (req, res) => {
   Key.findOne().exec((err, key_data) => {
     if (req.body.key && key_data && req.body.key === key_data.key) {
       let hashedPassword = bcrypt.hashSync(req.body.password, 8);
@@ -59,51 +66,6 @@ app.post('/employee/register2', (req, res) => {
     }
   })
 })
-
-const result_failed = {
-  result: "failed",
-  data: ""
-};
-
-// ---------- employee registor
-app.post('/employee/register', (req, res) => {
-  Key.find().exec(function (err, key_data) {
-    if (req.body.key == "115522") {
-      var hashedPassword = bcrypt.hashSync(req.body.password, 8);
-      req.body.password = hashedPassword;
-
-      var employee = new Employee({
-        _id: new mongoose.Types.ObjectId(),
-        username: req.body.username,
-        password: req.body.password,
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        phone: req.body.phone,
-        address: req.body.address,
-        allergy_history: req.body.allergy_history,
-        birthday: req.body.birthday,
-        personalid: req.body.personalid,
-        record_date: new Date(),
-      });
-      employee.save(function (err, data) {
-        if (err) {
-          console.log(err)
-          res.status(400).json(result_failed);
-        }
-        else {
-          const finalResult = {
-            result: "success",
-            data: " "
-          };
-          res.status(201).json({ result: "success " + data.username })
-        }
-      });
-    }
-    else {
-      res.status(401).json({ result: "Wrong code" })
-    }
-  })
-});
 
 // ---------- employee login
 app.post('/employee/login', (req, res) => {
