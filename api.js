@@ -17,6 +17,49 @@ app.use(cors())
 
 // --------------------------------------------
 
+app.post('/employee/register2', (req, res) => {
+  Key.findOne().exec((err, key_data) => {
+    if (req.body.key && key_data && req.body.key === key_data.key) {
+      let hashedPassword = bcrypt.hashSync(req.body.password, 8);
+      req.body.password = hashedPassword;
+      let employee = new Employee({
+        _id: new mongoose.Types.ObjectId(),
+        username: req.body.username,
+        password: req.body.password,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        phone: req.body.phone,
+        address: req.body.address,
+        birthday: req.body.birthday,
+        record_date: new Date(),
+      })
+      employee.save((err, data) => {
+        if (err && err.code === 11000 && err.errmsg.search("username") >= 0) {
+          res.status(400).json({ error: err.name, code: err.code, key: "username" });
+        }
+        else if (err && err.code === 11000 && err.errmsg.search("phone") >= 0) {
+          res.status(400).json({ error: err.name, code: err.code, key: "phone" });
+        }
+        else if (err && err.message && err.message.search("maximum") >= 0) {
+          res.status(400).json({ error: err.name, message: "maximum", key: "phone" });
+        }
+        else if (err && err.message && err.message.search("minimum") >= 0) {
+          res.status(400).json({ error: err.name, message: "minimum", key: "phone" });
+        }
+        else if (data) {
+          res.status(201).json(data)
+        }
+        else {
+          res.status(400).json(err)
+        }
+      })
+    }
+    else {
+      res.status(401).json({ error: "Wrong code" })
+    }
+  })
+})
+
 const result_failed = {
   result: "failed",
   data: ""
@@ -44,6 +87,7 @@ app.post('/employee/register', (req, res) => {
       });
       employee.save(function (err, data) {
         if (err) {
+          console.log(err)
           res.status(400).json(result_failed);
         }
         else {

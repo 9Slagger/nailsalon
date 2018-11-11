@@ -11,7 +11,12 @@ var employeeSchema = Schema({
     password: String,
     firstname: String,
     lastname: String,
-    phone: String,
+    phone: {
+        type: String,
+        unique: true,
+        minlength: 10,
+        maxlength: 10
+    },
     address: String,
     birthday: Date,
     record_date: Date,

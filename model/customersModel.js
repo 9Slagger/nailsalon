@@ -13,11 +13,15 @@ var customerSchema = Schema({
     lastname: String,
     phone: {
         type: String,
-        unique: true
+        unique: true,
+        minlength: 10,
+        maxlength: 10
     },
     personalid :{
         type: Number,
-        unique: true
+        unique: true,
+        min: 13,
+        max: 13
     },
     address: String,
     allergy_history: String,
