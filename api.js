@@ -845,6 +845,17 @@ app.put('/room_usage', verifyToken, (req, res) => {
   });
 });
 
+app.delete('/room_usage', verifyToken, (req, res) => {
+  Room_usage.findOneAndDelete({ _id: req.body.id }, (err, data) => {
+    if (data) {
+      res.status(204).json(data)
+    }
+    else {
+      res.status(400).json(err)
+    }
+  });
+});
+
 app.get('/customer', (req, res) => {
   if (req.query.personalid) {
     Customer.findOne({ personalid: req.query.personalid }, (err, data) => {
