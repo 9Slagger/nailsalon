@@ -845,8 +845,8 @@ app.put('/room_usage', verifyToken, (req, res) => {
   });
 });
 
-app.delete('/room_usage', verifyToken, (req, res) => {
-  Room_usage.findOneAndDelete({ _id: req.body.id }, (err, data) => {
+app.delete('/room_usage/:id', verifyToken, (req, res) => {
+  Room_usage.findOneAndDelete({ _id: req.params.id }, (err, data) => {
     if (data) {
       res.status(204).json(data)
     }
