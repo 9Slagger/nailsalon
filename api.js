@@ -47,10 +47,10 @@ app.post('/employee/register', (req, res) => {
         else if (err && err.code === 11000 && err.errmsg.search("phone") >= 0) {
           res.status(400).json({ error: err.name, code: err.code, key: "phone" });
         }
-        else if (err && err.message && err.message.search("maximum") >= 0) {
+        else if (err && err.message && err.message.search("maximum") >= 0 && err.message.search("phone") >= 0) {
           res.status(400).json({ error: err.name, message: "maximum", key: "phone" });
         }
-        else if (err && err.message && err.message.search("minimum") >= 0) {
+        else if (err && err.message && err.message.search("minimum") >= 0 && err.message.search("phone") >= 0) {
           res.status(400).json({ error: err.name, message: "minimum", key: "phone" });
         }
         else if (data) {
@@ -128,18 +128,36 @@ app.post('/customer/register', verifyToken, (req, res) => {
     record_date: new Date(),
     employee: res.is
   });
-  customer.save(function (err, data) {
-    if (err) {
-      res.status(400).json(result_failed);
+  customer.save((err, data) => {
+    console.log(err)
+    if (err && err.code === 11000 && err.errmsg.search("username") >= 0) {
+      res.status(400).json({ error: err.name, code: err.code, key: "username" });
+    }
+    else if (err && err.code === 11000 && err.errmsg.search("phone") >= 0) {
+      res.status(400).json({ error: err.name, code: err.code, key: "phone" });
+    }
+    else if (err && err.code === 11000 && err.errmsg.search("personalid") >= 0) {
+      res.status(400).json({ error: err.name, code: err.code, key: "personalid" });
+    }
+    else if (err && err.message && err.message.search("maximum") >= 0 && err.message.search("phone") >= 0) {
+      res.status(400).json({ error: err.name, message: "maximum", key: "phone" });
+    }
+    else if (err && err.message && err.message.search("minimum") >= 0 && err.message.search("phone") >= 0) {
+      res.status(400).json({ error: err.name, message: "minimum", key: "phone" });
+    }
+    else if (err && err.message && err.message.search("maximum") >= 0 && err.message.search("personalid") >= 0) {
+      res.status(400).json({ error: err.name, message: "maximum", key: "`personalid`" });
+    }
+    else if (err && err.message && err.message.search("minimum") >= 0 && err.message.search("personalid") >= 0) {
+      res.status(400).json({ error: err.name, message: "minimum", key: "`personalid`" });
+    }
+    else if (data) {
+      res.status(201).json(data)
     }
     else {
-      const finalResult = {
-        result: "success",
-        data: " "
-      };
-      res.status(201).json({ result: "success " + data.username })
+      res.status(400).json(err)
     }
-  });
+  })
 });
 
 // ---------- customer login
@@ -192,18 +210,26 @@ app.post('/doctor/register', (req, res) => {
     birthday: req.body.birthday,
     record_date: new Date()
   });
-  doctor.save(function (err, data) {
-    if (err) {
-      res.status(400).json(result_failed);
+  doctor.save((err, data) => {
+    if (err && err.code === 11000 && err.errmsg.search("username") >= 0) {
+      res.status(400).json({ error: err.name, code: err.code, key: "username" });
+    }
+    else if (err && err.code === 11000 && err.errmsg.search("phone") >= 0) {
+      res.status(400).json({ error: err.name, code: err.code, key: "phone" });
+    }
+    else if (err && err.message && err.message.search("maximum") >= 0 && err.message.search("phone") >= 0) {
+      res.status(400).json({ error: err.name, message: "maximum", key: "phone" });
+    }
+    else if (err && err.message && err.message.search("minimum") >= 0 && err.message.search("phone") >= 0) {
+      res.status(400).json({ error: err.name, message: "minimum", key: "phone" });
+    }
+    else if (data) {
+      res.status(201).json(data)
     }
     else {
-      const finalResult = {
-        result: "success",
-        data: " "
-      };
-      res.status(201).json({ result: "success " + data.username })
+      res.status(400).json(err)
     }
-  });
+  })
 });
 
 // ---------- doctor login

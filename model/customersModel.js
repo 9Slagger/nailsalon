@@ -20,8 +20,8 @@ var customerSchema = Schema({
     personalid :{
         type: Number,
         unique: true,
-        min: 13,
-        max: 13
+        min: 1000000000000,
+        max: 9999999999999
     },
     address: String,
     allergy_history: String,
